@@ -1,0 +1,18 @@
+2015-07-29
+    * v.3.0.47
+    * Change behaviour for mandatory messages
+2015-07-29
+    * v.3.0.48
+    * Question type: html, text, typo3 element, typoscript could work with dependencies
+2015-08-05
+    * v.3.0.49
+    * Fix problem with Additional Values ("Show textfield after answer") in Backend for radiobutton
+2015-11-04
+    * v.3.0.51
+    * Supports TYPO3 v.7
+2016-01-22
+    * v.3.0.52
+    * Fix bug #68780
+2016-01-22
+    * v.3.1.0
+    * Supports TYPO3 v.7.x

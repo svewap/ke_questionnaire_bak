@@ -1,0 +1,23 @@
+<div class="keqPointsWrap">
+    	<table class="keqPointsTable">
+		<f:if condition="{settings.showAverageHidePoints} == 0">
+			<tr>
+				<td><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang.xml:points.maxInfo" /></td>
+				<td class="numeric">{result.maxPoints}</td>
+			</tr>
+			<tr>
+				<td><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang.xml:points.yourInfo" /></td>
+				<td class="numeric">{result.points}</td>
+			</tr>			
+		</f:if>
+		<f:if condition="{settings.showAverage}">
+			<f:render partial="Result/Average" arguments="{result:result,average:average}" />
+		</f:if>
+                <f:if condition="{settings.showGroupPoints}">
+                    <f:render partial="Result/GroupPoints" arguments="{result:result,assessmentGroups:assessmentGroups}" />
+                </f:if>
+                <f:if condition="{settings.showGroupCorrectAnswers}">
+                    <f:render partial="Result/GroupCorrectAnswers" arguments="{result:result,assessmentGroups:assessmentGroups}" />
+                </f:if>
+	</table>	
+</div>

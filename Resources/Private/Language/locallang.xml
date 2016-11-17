@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for the Questionnaire extension in the FRONTEND</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="tx_kequestionnaire_domain_model_question">KeQ Content</label>
+			<label index="tx_kequestionnaire_domain_model_question.type">Type</label>
+			<label index="tx_kequestionnaire_domain_model_question.title">Title</label>
+			<label index="tx_kequestionnaire_domain_model_question.show_title">Show title</label>
+			<label index="tx_kequestionnaire_domain_model_question.text">Text</label>
+			<label index="tx_kequestionnaire_domain_model_question.help_text">Help text</label>
+			<label index="tx_kequestionnaire_domain_model_question.image">Image</label>
+			<label index="tx_kequestionnaire_domain_model_question.image_position">Image position</label>
+			<label index="tx_kequestionnaire_domain_model_question.image_position.I.1">Top</label>
+			<label index="tx_kequestionnaire_domain_model_question.image_position.I.2">Right</label>
+			<label index="tx_kequestionnaire_domain_model_question.image_position.I.3">Left</label>
+			<label index="tx_kequestionnaire_domain_model_question.image_position.I.4">Bottom</label>
+			<label index="tx_kequestionnaire_domain_model_question.is_mandatory">Is mandatory</label>
+			<label index="tx_kequestionnaire_domain_model_question.must_be_correct">Should the question be answered correctly?</label>
+			<label index="tx_kequestionnaire_domain_model_question.answers">Answers</label>
+			<label index="tx_kequestionnaire_domain_model_question.conent_id">TYPO3 ContentElement</label>
+            <label index="tx_kequestionnaire_domain_model_question.dependancies">Dependancies</label>
+			
+			<label index="tx_kequestionnaire_domain_model_answer">Answers</label>
+			<label index="tx_kequestionnaire_domain_model_answer.type">Type</label>
+			<label index="tx_kequestionnaire_domain_model_answer.title">Title</label>
+			<label index="tx_kequestionnaire_domain_model_answer.points">Points</label>
+			<label index="tx_kequestionnaire_domain_model_answer.text">Text</label>
+			<label index="tx_kequestionnaire_domain_model_answer.is_correct_answer">Correct answer</label>
+			<label index="tx_kequestionnaire_domain_model_resultquestion">Resultquestions</label>
+			<label index="tx_kequestionnaire_domain_model_resultquestion.answers">Answers</label>
+			<label index="tx_kequestionnaire_domain_model_resultquestion.question">Question</label>
+			<label index="tx_kequestionnaire_domain_model_resultquestion.points">Collected points</label>
+			<label index="tx_kequestionnaire_domain_model_resultanswer">Resultanswers</label>
+			<label index="tx_kequestionnaire_domain_model_resultanswer.answer">Answer</label>
+			<label index="tx_kequestionnaire_domain_model_resultanswer.value">Value</label>
+			<label index="tx_kequestionnaire_domain_model_result">Results</label>
+			<label index="tx_kequestionnaire_domain_model_result.finished">Finished</label>
+			<label index="tx_kequestionnaire_domain_model_result.questions">Questions</label>
+			<label index="tx_kequestionnaire_domain_model_result.points">Collected points</label>
+			<label index="tx_kequestionnaire_domain_model_result.max_points">Maximum of reachable points</label>
+			<label index="tx_kequestionnaire_domain_model_authcode">Authentication Code</label>
+			<label index="tx_kequestionnaire_domain_model_authcode.auth_code">Authentication Code</label>
+			<label index="tx_kequestionnaire_domain_model_authcode.email">E-Mail</label>
+
+			<label index="flashmessage.Result.mandatory">One of the questions was mandatory</label>
+			<label index="flashmessage.Result.mustBeCorrect">One or more questions have to be answered correctly</label>
+
+			<label index="prevPage">Previous page</label>
+			<label index="nextPage">Next page</label>
+			<label index="mandatory">This question must be answered.</label>
+			<label index="mustBeCorrect">This question must be answered correctly.</label>
+			<label index="submitKeq">Submit questionnaire</label>
+			<label index="saveKeq">Save questionnaire</label>
+			<label index="maxAnswers">You reached the max answers allowed:</label>
+			<label index="minAnswers">Minimum answers needed:</label>
+
+			<label index="answerValidation.numeric">Only numeric values allowed. Number divider: </label>
+			<label index="answerValidation.integer">Only integer values allowed</label>
+			<label index="answerValidation.date">Only date values allowed. Please use the following format:</label>
+			<label index="answerValidation.email">Only valid e-mail addresses allowed</label>
+			<label index="answerValidation.compareText">Please enter the correct text</label>
+			<label index="answerValidation.keywords">You need to match different keywords in your text</label>
+
+			<label index="wizard.setArea">Save area-coordinates</label>
+			<label index="wizard.closeWizard">Close Wizard</label>
+
+			<label index="slider.selectedValue">Selected value</label>
+
+			<label index="endText.standard">Thank you for participating!</label>
+			<label index="feUserAccess.info">You need to be logged in to access this questionnaire.</label>
+			<label index="maxParticipations.info">The maximum number of participations for this questionnaire is reached.</label>
+			<label index="authCodeAccess.info">You need an Authentication Code to access this questionnaire. Please enter the Authentication Code in the input-field below.</label>
+			<label index="authCodeAccess.submit">Submit Authentication Code</label>
+                        <label index="dependancyAccess.info">You need to finish the following questionnaire: </label>
+			<label index="dependancyAccess.infoPoints">You need to finish the following questionnaire with a certain amount of points: </label>
+
+			<label index="mail.standard.subject">You were invited!</label>
+			<label index="mail.standard.text.before">You were invited to answer a questionnaire. For access you will need the following Authentication Code:&lt;br&gt;</label>
+			<label index="mail.standard.text.after">&lt;br&gt;We would love to see you soon.&lt;br&gt;</label>
+                        <label index="mail.reminder.subject">Do you remember? You were invited!</label>
+			<label index="mail.reminder.text.before">You were invited to answer a questionnaire but we found no participation, yet. For access you will need the following Authentication Code:&lt;br&gt;</label>
+			<label index="mail.reminder.text.after">&lt;br&gt;We would love to see you soon.&lt;br&gt;</label>
+            
+                        <label index="qList.resultFrom">Participation finished: </label>
+			<label index="reclaimAuthcode.info">Please enter your E-mail address</label>
+			<label index="reclaimAuthcode.submit">Reclaim Authentication Code</label>
+			<label index="reclaimAuthcode.send">An Authentication Code has been sent to your E-mail address</label>
+			<label index="reclaimAuthcode.mailErrorText">The E-mail address was not valid!</label>
+			<label index="reclaimAuthcode.mailErrorTitle">E-mail error</label>
+			<label index="reclaimAuthcode.notFoundText">There is no open/unused Authentication Code for this E-mail!</label>
+			<label index="reclaimAuthcode.notFoundTitle">Authentication Code error</label>
+
+			<label index="participationChart.finished">Finished</label>
+			<label index="participationChart.all">All</label>
+
+			<label index="analysis.selectedQ.header">Analysis of Questionnaire</label>
+			<label index="analysis.analyseType">Type of analysis</label>
+			<label index="analysis.analyseType.general">General</label>
+			<label index="analysis.analyseType.questions">Questions</label>
+			<label index="analysis.questionSelect">Question</label>
+
+			<label index="feView.noResultError">No display possible, you need to call this plug-in with a ParticipationId</label>
+			<label index="feView.noResultError">No Participation selected</label>
+
+			<label index="navigation.onPage">on page</label>
+			<label index="navigation.page">page</label>
+
+			<label index="premiuminfo.standard">This is a premium option of ke_questionnaire</label>
+
+                        <label index="report.fileAccess.title">ke_questionnaire: deny direct access to pdf-temp folder</label>
+                        <label index="report.fileAccess.ok">OK</label>
+                        <label index="report.fileAccess.error">pdf-temp folder is accessible</label>
+                        <label index="report.fileAccess.error.explanation">Please deny access to folder typo3temp/ke_questionnaire/pdf and its subfolders from the outside.</label>
+                        <label index="report.fileAccess.warning">not testable due to permissions</label>
+                        <label index="report.fileAccess.warning.details">Could not create testfile in folder typo3temp/ke_questionnaire/pdf . Please deny access to folder typo3temp/ke_questionnaire/pdf and its subfolders from the outside manually.</label>
+                        <label index="report.fileAccess.warning.unknown">Unknown error. Please make sure typo3temp/ke_questionnaire/pdf cannot be accessed from the outside.</label>
+
+			<label index="points.maxInfo">Maximum Points you could have achieved in this questionnaire: </label>
+			<label index="points.yourInfo">Points achieved in this questionnaire: </label>
+                </languageKey>
+		<languageKey index="de" type="array">
+			<label index="tx_kequestionnaire_domain_model_question">KeQ Inhaltselement</label>
+			<label index="tx_kequestionnaire_domain_model_question.type">Typ</label>
+			<label index="tx_kequestionnaire_domain_model_question.title">Titel</label>
+			<label index="tx_kequestionnaire_domain_model_question.show_title">Zeige Titel</label>
+			<label index="tx_kequestionnaire_domain_model_question.text">Text</label>
+			<label index="tx_kequestionnaire_domain_model_question.help_text">Hilfetext</label>
+			<label index="tx_kequestionnaire_domain_model_question.image">Bild</label>
+			<label index="tx_kequestionnaire_domain_model_question.image_position">Bildposition</label>
+			<label index="tx_kequestionnaire_domain_model_question.image_position.I.1">Oben</label>
+			<label index="tx_kequestionnaire_domain_model_question.image_position.I.2">Rechts</label>
+			<label index="tx_kequestionnaire_domain_model_question.image_position.I.3">Links</label>
+			<label index="tx_kequestionnaire_domain_model_question.image_position.I.4">Unten</label>
+			<label index="tx_kequestionnaire_domain_model_question.is_mandatory">Pflichtfeld</label>
+			<label index="tx_kequestionnaire_domain_model_question.must_be_correct">Muss die Frage korrekt beantwortet werden?</label>
+			<label index="tx_kequestionnaire_domain_model_question.answers">Antworten</label>
+			<label index="tx_kequestionnaire_domain_model_question.conent_id">Typo3 ContentElement</label>
+                        <label index="tx_kequestionnaire_domain_model_question.dependancies">Abhängigkeiten</label>
+			
+			<label index="tx_kequestionnaire_domain_model_answer">Antwort</label>
+			<label index="tx_kequestionnaire_domain_model_answer.type">Typ</label>
+			<label index="tx_kequestionnaire_domain_model_answer.title">Titel</label>
+			<label index="tx_kequestionnaire_domain_model_answer.points">Punkte</label>
+			<label index="tx_kequestionnaire_domain_model_answer.text">Text</label>
+			<label index="tx_kequestionnaire_domain_model_answer.is_correct_answer">Ist dies die korrekte Antwort?</label>
+			
+			<label index="tx_kequestionnaire_domain_model_resultquestion">Frageergebnis</label>
+			<label index="tx_kequestionnaire_domain_model_resultquestion.answers">Antworten</label>
+			<label index="tx_kequestionnaire_domain_model_resultquestion.question">Frage</label>
+			<label index="tx_kequestionnaire_domain_model_resultquestion.points">Gesammelte Punkte</label>
+			
+			<label index="tx_kequestionnaire_domain_model_resultanswer">Antwortergebnis der Fragen</label>
+			<label index="tx_kequestionnaire_domain_model_resultanswer.answer">Antwort</label>
+			<label index="tx_kequestionnaire_domain_model_resultanswer.value">Wert</label>
+			
+			<label index="tx_kequestionnaire_domain_model_result">Ergebnis</label>
+			<label index="tx_kequestionnaire_domain_model_result.finished">Abgeschlossen</label>
+			<label index="tx_kequestionnaire_domain_model_result.questions">Fragen</label>
+			<label index="tx_kequestionnaire_domain_model_result.points">Gesammelte Punkte</label>
+			<label index="tx_kequestionnaire_domain_model_result.max_points">Maximal erreichbare Punkte</label>
+			
+			<label index="tx_kequestionnaire_domain_model_authcode">Authentication Code</label>
+			<label index="tx_kequestionnaire_domain_model_authcode.auth_code">Authentication Code</label>
+			<label index="tx_kequestionnaire_domain_model_authcode.email">E-Mail</label>
+
+			<label index="flashmessage.Result.mandatory">Eine der Fragen ist eine Pflichtfrage</label>
+			<label index="flashmessage.Result.mustBeCorrect">Eine oder mehrere der Fragen müssen korrekt beantwortet werden</label>
+
+			<label index="prevPage">Vorige Seite</label>
+			<label index="nextPage">Nächste Seite</label>
+			<label index="mandatory">Diese Frage muss beantwortet werden.</label>
+			<label index="mustBeCorrect">Diese Frage muss korrekt beantwortet werden.</label>
+			<label index="submitKeq">Umfrage absenden</label>
+			<label index="saveKeq">Umfrage abspeichern</label>
+			<label index="maxAnswers">Die maximale Anzahl von möglichen Antworten wurde erreicht:</label>
+			<label index="minAnswers">Anzahl der mindestens zu gebenden Antworten:</label>
+
+			<label index="answerValidation.numeric">Es sind nur Zahlen erlaubt. Trennzeichen: </label>
+			<label index="answerValidation.integer">Es sind nur ganze Zahlen erlaubt.</label>
+			<label index="answerValidation.date">Nur Datumsangaben erlaubt. Bitte folgendes Format nutzen: </label>
+			<label index="answerValidation.email">Es sind nur Email-Adressen erlaubt. Bitte folgendes Format nutzen: </label>
+			<label index="answerValidation.compareText">Bitte geben sie den korrekten Wortlaut ein.</label>
+			<label index="answerValidation.keywords">Es müssen bestimmte Schlagwörter im Text verwendet werden.</label>
+
+			<label index="wizard.setArea">Bereichs-Koordinaten speichern</label>
+			<label index="wizard.closeWizard">Wizard schliessen</label>
+
+			<label index="slider.selectedValue">Ausgewählter Wert</label>
+
+			<label index="endText.standard">Vielen Dank für ihre Teilnahme!</label>
+			<label index="feUserAccess.info">Sie müssen eingeloggt sein, um an diesem Fragebogen teilnehmen zu können.</label>
+			<label index="maxParticipations.info">Die maximale Anzahl an Teilnahmen für diesen Fragebogen ist erreicht.</label>
+			<label index="authCodeAccess.info">Es wird ein Authentication Code benötigt, um an diesem Fragebogen teilnehmen zu können. Bitte tragen Sie Ihren Authentication Code in dem unten stehenden Eingabefeld ein.</label>
+			<label index="authCodeAccess.submit">Authentication Code absenden</label>
+                        <label index="dependancyAccess.info">Sie müssen erst die folgenden Fragebögen abschliessen: </label>
+			<label index="dependancyAccess.infoPoints">Sie müssen erst die folgenden Fragebögen mit entsprechender Punktzahl abschliessen: </label>
+
+			<label index="mail.standard.subject">Sie wurden eingeladen!</label>
+			<label index="mail.standard.text.before">Sie wurden eingeladen an einem Fragebogen teilzunehmen. Um auf den Fragebogen zugreifen zu können benötigen Sie den folgenden Authentication Code:&lt;br&gt;</label>
+			<label index="mail.standard.text.after">&lt;br&gt;Wir freuen uns, Sie bald bei uns begrüßen zu dürfen.&lt;br&gt;&lt;br&gt;Sie können auch den folgenden Link nutzen:&lt;br&gt;</label>
+                        <label index="mail.reminder.subject">Erinnern Sie sich? Sie wurden eingeladen!</label>
+			<label index="mail.reminder.text.before">Sie wurden eingeladen an einem Fragebogen teilzunehmen. Leider haben wir noch keine Teilnahme von Ihnen registrieren können. Um auf den Fragebogen zugreifen zu können benötigen Sie den folgenden Authentication Code:&lt;br&gt;</label>
+			<label index="mail.reminder.text.after">&lt;br&gt;Wir freuen uns, Sie bald bei uns begrüßen zu dürfen.&lt;br&gt;&lt;br&gt;Sie können auch den folgenden Link nutzen:&lt;br&gt;</label>
+            
+                        <label index="qList.resultFrom">Abgeschlossene Teilnahmen: </label>
+			<label index="reclaimAuthcode.info">Bitte tragen Sie ihre E-Mail-Adresse ein</label>
+			<label index="reclaimAuthcode.submit">Authentication Code erneut anfordern</label>
+			<label index="reclaimAuthcode.send">Eine E-Mail mit Ihrem Authentication Code wurde an Ihre E-Mail-Adresse versandt</label>
+			<label index="reclaimAuthcode.mailErrorText">Die eingegebene E-Mail-Adresse war nicht korrekt!</label>
+			<label index="reclaimAuthcode.mailErrorTitle">E-Mail-Fehler</label>
+			<label index="reclaimAuthcode.notFoundText">Für diese E-Mail-Adresse ist kein offener/ungenutzter Authentication Code vorhanden!</label>
+			<label index="reclaimAuthcode.notFoundTitle">Authentication Code-Fehler</label>
+
+			<label index="participationChart.finished">Abgeschlossen</label>
+			<label index="participationChart.all">Alle</label>
+
+			<label index="analysis.selectedQ.header">Analyse des Fragebogens</label>
+			<label index="analysis.analyseType">Typ der Analyse</label>
+			<label index="analysis.analyseType.general">Allgemein</label>
+			<label index="analysis.analyseType.questions">Fragen</label>
+			<label index="analysis.questionSelect">Frage</label>
+
+			<label index="feView.noResultError">Keine Anzeige möglich, Sie müssen das Plugin mit der ID einer Fragebogenteilnahme aufrufen</label>
+			<label index="feView.noResultError">Keine Teilnahme ausgewählt</label>
+
+			<label index="navigation.onPage">auf Seite </label>
+			<label index="navigation.page">Seite</label>
+
+			<label index="premiuminfo.standard">Diese Option steht Ihnen in der Premium-Version von ke_questionnaire zur verfügung</label>
+            
+                        <label index="report.fileAccess.title">ke_questionnaire: PDF-Tempordner muss lesegeschützt sein</label>
+                        <label index="report.fileAccess.ok">OK</label>
+                        <label index="report.fileAccess.error">PDF-Ordner ist nicht lesegeschützt</label>
+                        <label index="report.fileAccess.error.explanation">Bitte stellen Sie sicher, dass Dateien des Ordners typo3temp/ke_questionnaire/pdf, sowie sämtlicher Unterordner, nicht von außen gelesen werden können.</label>
+                        <label index="report.fileAccess.warning">nicht prüfbar</label>
+                        <label index="report.fileAccess.warning.details">Testdatei konnte im Ordner typo3temp/ke_questionnaire/pdf nicht erstellt werden. Bitte stellen Sie manuell sicher, dass Dateien des Ordners typo3temp/ke_questionnaire/pdf, sowie sämtlicher Unterordner, nicht von außen gelesen werden können.</label>
+                        <label index="report.fileAccess.warning.unknown">Unbekannter Fehler, bitte stellen Sie manuell sicher, dass die Inhalte des Ordners typo3temp/ke_questionnaire/pdf von außen nicht gelesen werden können.</label>
+
+			<label index="points.maxInfo">Maximale Anzahl an Punkten, die in diesem Fragebogen zu erreichen waren: </label>
+			<label index="points.yourInfo">Erreichte Punktzahl in diesem Fragebogen: </label>
+		</languageKey>
+	</data>
+</T3locallang>

@@ -1,0 +1,26 @@
+<f:layout name="Default" />
+
+This Template is responsible for creating a table of domain objects.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+  Resources:
+    Private:
+      Templates:
+        New.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
+<f:section name="main">
+	<f:flashMessages />
+	<div id="keq_loadingDiv">Lädt!</div>
+	<f:if condition="{questionnaire.page} == 0">
+		<f:then>
+			<f:format.html>{settings.description}</f:format.html>
+			<f:link.action action="new" arguments="{requestedPage:1,authCode:newResult.authCode}">{settings.descriptionlinktext}</f:link.action>
+		</f:then>
+		<f:else>
+			<f:render partial="Result/Form" arguments="{questionnaire: questionnaire, newResult: newResult, questions: questions}" />
+		</f:else>
+	</f:if>
+</f:section>

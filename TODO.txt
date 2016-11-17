@@ -1,0 +1,4 @@
+TODO-Liste ums nicht zu vergessen:
+
+- TYPO3\CMS\Fluid\View\TemplateView->getTemplateRootPath() - since fluid 6.2, will be removed two versions later. Use getTemplateRootPaths() instead
+- TYPO3\CMS\Fluid\View\TemplateView->getLayoutRootPath() - since fluid 6.2, will be removed two versions later. Use getLayoutRootPaths()

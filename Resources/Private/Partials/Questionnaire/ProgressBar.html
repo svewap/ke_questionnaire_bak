@@ -1,0 +1,8 @@
+ <script>
+	jQuery(function() {
+		jQuery( "#keqPageProgressbar" ).progressbar({
+			value: (({questionnaire.page} / {questionnaire.countPages}) * 100)
+		});
+	});
+</script>
+<div id="progressbar-wrap"><div class="keqProgressbar" id="keqPageProgressbar"></div><div class="progress-label">{questionnaire.page} / {questionnaire.countPages}</div></div>

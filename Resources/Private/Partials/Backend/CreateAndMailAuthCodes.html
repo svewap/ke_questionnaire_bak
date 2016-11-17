@@ -1,0 +1,121 @@
+{namespace ke=Kennziffer\KeQuestionnaire\ViewHelpers}
+<f:form action="createAndMailAuthCodes" controller="Backend" method="post">
+	<input type="hidden" name="uid" value="{plugin.uid}" /><f:form.hidden name="pluginUid" value="{plugin.uid}" />
+	<br />
+	<f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:mail.createLabel" />: <br />
+	<div id="tabs">
+		<ul>
+			<li><a href="#tabs-1"><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:mail.tabEmail" /></a></li>
+			<li><a href="#tabs-2"><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:mail.tabFeUser" /></a></li>
+			<f:if condition="{ke:premiumLoaded()}"><li><a href="#tabs-3"><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:mail.tabFeUserGroup" /></a></li></f:if>
+			<li><a href="#tabs-4"><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:mail.tabTtAddress" /></a></li>
+		</ul>
+		<div id="tabs-1">
+			<p>
+				<b><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:mail.tabEmail" /></b><br />
+				<f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:mail.emailLabel" />: <br />
+			</p>
+			<p><f:form.textarea name="emails" rows="10" cols="50" value="{plugin.ffdata.settings.email.invite.emails}"/><br /></p>
+			<hr />
+		</div>
+		<div id="tabs-2">
+			<p>
+				<b><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:mail.tabFeUser" /></b><br />
+				<f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:mail.feuserLabel" />: <br />
+			</p>
+			<p>
+				<ul class="keq-be-50-list">
+				<f:for each="{feusers}" as="user">
+				<f:if condition="{user.email}">
+					<f:then>
+						<li>
+							<f:form.checkbox name="feusers[]" value="{user.uid}" />({user.username}/{user.email}) {user.firstname} {user.lastname}
+						</li>
+					</f:then>
+					<f:else>
+						<li>
+							&nbsp;({user.username}) {user.firstname} {user.lastname}
+						</li>
+					</f:else>
+				</f:if>
+				</f:for>
+				</ul>
+			</p>
+			<div class="clearer">&nbsp;</div>
+			<hr />
+		</div>
+		<f:if condition="{ke:premiumLoaded()}">
+		<div id="tabs-3">
+			<p>
+				<b><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:mail.tabFeUserGroup" /></b><br />
+				<f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:mail.feuserGroupLabel" />: <br />
+			</p>
+			<p>
+				<ul class="keq-be-50-list">
+				<f:for each="{fegroups}" as="group">
+					<li>
+						<f:form.checkbox name="fegroups[]" value="{group.uid}" />{group.title}
+					</li>
+				</f:for>
+				</ul>				
+			</p>
+			<div class="clearer">&nbsp;</div>
+			<hr />
+		</div>
+		</f:if>
+		<div id="tabs-4">
+			<p>
+				<b><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:mail.tabTtAddress" /></b><br />
+				<f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:mail.ttaddressLabel" />: <br />
+			</p>
+			<p>
+				<f:if condition="{ttaddresses}">
+					<f:then>
+						<ul class="keq-be-50-list">
+						<f:for each="{ttaddresses}" as="address">
+						<f:if condition="{address.email}">
+							<f:then>
+								<li>
+									<f:form.checkbox name="ttaddress[]" value="{address.email}" />{address.first_name} {address.last_name} ({address.email})
+								</li>
+							</f:then>
+							<f:else>
+								<li>
+									{address.first_name} {address.last_name}
+								</li>
+							</f:else>
+						</f:if>
+						</f:for>
+						</ul>
+					</f:then>
+					<f:else>
+						<f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:mail.noTtaddresses" />
+					</f:else>
+				</f:if>
+			</p>
+			<div class="clearer">&nbsp;</div>
+			<hr />
+		</div>
+	</div>
+	<br />
+	<f:form.submit value="{f:translate(key: 'LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:mail.createSubmit')}" />
+	<hr />
+	<f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:mail.viewMail" />: <br />
+	<br />
+	<div class="mailPreview">
+		<b>Subject:</b> {preview.subject}<br /><br />
+		<b>Mail-Text:</b><br />
+		<f:format.raw>{preview.body}</f:format.raw>	
+	</div>
+	<hr />
+	<b><a title="Edit record" onclick="window.location.href='alt_doc.php?returnUrl='+T3_THIS_LOCATION+'&edit[tt_content][{plugin.uid}]=edit'; return false;" href="#">
+		<f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod.xml:editPlugin" />
+		</a>
+	</b>
+</f:form>
+<script type="text/javascript">
+	jQuery.noConflict();
+	jQuery(function(){
+		jQuery("#tabs").tabs();
+	});
+</script>

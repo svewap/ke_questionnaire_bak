@@ -1,0 +1,21 @@
+<f:render partial="Question/QuestionTitle" arguments="{question: question}" />
+<div class="keqAnswerBox">
+    <f:for each="{question.answers}" as="answer">
+        <f:if condition="{answer.template}">
+            <f:then>
+                <ke:renderPartial partial="{answer.template}" arguments="{question: question, answer: answer, newResult: newResult}" />
+            </f:then>
+            <f:else>
+				<f:if condition="{answer.pdfType} == 'special'">
+					<f:then>
+						<f:render partial="Answer/PDF/{answer.shortType}" arguments="{question: question, answer: answer, newResult: newResult}" />
+					</f:then>
+					<f:else>
+						<f:render partial="Answer/{answer.shortType}" arguments="{question: question, answer: answer, newResult: newResult}" />
+					</f:else>
+				</f:if>                
+            </f:else>
+        </f:if>
+    </f:for>
+</div>
+<div style="clear:both;line-height: 1px;">&nbsp;</div>
