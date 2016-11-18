@@ -98,7 +98,6 @@ class BackendController extends  \Kennziffer\KeQuestionnaire\Controller\Abstract
 		//get the first page given in the plugin data, this is the storage pid
 		$pids = explode(',',$this->plugin['pages']);
 		$this->storagePid = $pids[0];
-                //\TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($this->plugin, 'settings '.$this->storagePid);	
 	}
 
 	/**
@@ -122,6 +121,8 @@ class BackendController extends  \Kennziffer\KeQuestionnaire\Controller\Abstract
 		$authCodes = $this->authCodeRepository->findAllForPid($this->storagePid);
 		$this->view->assign('authCodes',$authCodes);		
 		$this->view->assign('plugin',$this->plugin);
+                
+                //\TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($this->extConf, 'extConf');
 	}
 	
 	/**
@@ -154,10 +155,13 @@ class BackendController extends  \Kennziffer\KeQuestionnaire\Controller\Abstract
 		
 		//feUser
 		$userRepository = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Domain\\Repository\\FrontendUserRepository');
+		$groupRepository = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Domain\\Repository\\FrontendUserGroupRepository');
 		$querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
 		$querySettings->setRespectStoragePage(FALSE);
 		$userRepository->setDefaultQuerySettings($querySettings);
+		$groupRepository->setDefaultQuerySettings($querySettings);
 		$this->view->assign('feusers',$userRepository->findAll());
+		$this->view->assign('fegroups',$groupRepository->findAll());
 		
 		//tt_address
 		$addresses = false;
@@ -175,13 +179,12 @@ class BackendController extends  \Kennziffer\KeQuestionnaire\Controller\Abstract
 		$preview = array();
 		$this->view->assign('authCode',array('authCode'=>'AUTHCODE'));
 		$preview['subject'] = ($this->plugin['ffdata']['settings']['email']['invite']['subject']?$this->plugin['ffdata']['settings']['email']['invite']['subject']:\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.standard.subject', $this->extensionName));
-                
-                $text['before'] = trim(($this->plugin['ffdata']['settings']['email']['invite']['text']['before']?$this->plugin['ffdata']['settings']['email']['invite']['text']['before']:\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.standard.text.before', $this->extensionName)));
-                $text['after'] = trim(($this->plugin['ffdata']['settings']['email']['invite']['text']['after']?$this->plugin['ffdata']['settings']['email']['invite']['text']['after']:\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.standard.text.after', $this->extensionName)));
+		$text['before'] = trim(($this->plugin['ffdata']['settings']['email']['invite']['text']['before']?$this->plugin['ffdata']['settings']['email']['invite']['text']['before']:\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.standard.text.before', $this->extensionName)));
+		$text['after'] = trim(($this->plugin['ffdata']['settings']['email']['invite']['text']['after']?$this->plugin['ffdata']['settings']['email']['invite']['text']['after']:\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.standard.text.after', $this->extensionName)));
 		$this->view->assign('text',$text);
-                //render the preview with the "CreatedMail"-Template
+		//render the preview with the "CreatedMail"-Template
 		$preview['body'] = trim($this->view->render('CreatedMail'));
-        
+		
 		$this->view->assign('preview', $preview);		
 	}
 	
@@ -199,7 +202,7 @@ class BackendController extends  \Kennziffer\KeQuestionnaire\Controller\Abstract
 			$newAuthCode->generateAuthCode($codeLength,$this->storagePid);
 			$newAuthCode->setPid($this->storagePid);
 			$this->authCodeRepository->add($newAuthCode);
-			$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
+			$persistenceManager = $this->objectManager->get('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
 			/* @var $persistenceManager \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager */
 			$persistenceManager->persistAll();
 		}
@@ -211,55 +214,129 @@ class BackendController extends  \Kennziffer\KeQuestionnaire\Controller\Abstract
 	 * generate and mail AuthCodes
 	 */
 	public function createAndMailAuthCodesAction() {
-            $this->view->assign('plugin',$this->plugin);
+                $this->view->assign('plugin',$this->plugin);
 		//emails to send the authcodes to
-		$emails = explode(',',$this->request->getArgument('emails'));
+		foreach (explode(',',$this->request->getArgument('emails')) as $mail){
+			if ($mail){
+				$email['email'] = $mail;
+                                $email['sourcetype'] = 'email';
+				$emails[] = $email;
+			}
+		}
+		
 		if ($this->request->hasArgument('feusers')){
 			$add = $this->request->getArgument('feusers');
-			foreach ($add as $mail){
-				$emails[] = $mail;
+			if (is_array($add)){
+				foreach ($add as $mail){
+					$mail = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord('fe_user',$mail);
+                                        $mail['sourcetype'] = 'feuser';
+					$emails[] = $mail;
+				}
+			}
+		}
+		if ($this->request->hasArgument('fegroups')){
+			$add = $this->getMailsFromFeGroups($this->request->getArgument('fegroups'));
+			if (is_array($add)){
+				foreach ($add as $mail){
+                                        $mail['sourcetype'] = 'feuser';
+					$emails[] = $mail;
+				}
 			}
 		}
 		if ($this->request->hasArgument('ttaddress')){
 			$add = $this->request->getArgument('ttaddress');
-			foreach ($add as $mail){
-				$emails[] = $mail;
+			if (is_array($add)){
+				foreach ($add as $mail){
+					$mail = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord('tt_address',$mail);
+                                        $mail['sourcetype'] = 'ttaddress';
+					$email = $mail;
+					$emails[] = $mail;
+				}
 			}
 		}
-		if ($this->settings['authCodes']['length']) $codeLength = $this->settings['authCodes']['length'];
+                //\TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($emails, 'emails');exit;
+                if ($this->settings['authCodes']['length']) $codeLength = $this->settings['authCodes']['length'];
 		else $codeLength = 10;
-		
 		
 		//send the mail for each given email
 		foreach ($emails as $mail){
-			if ($mail != ''){
+			if ($mail['email'] != ''){
 				//create the authcode
 				$newAuthCode = $this->objectManager->get('Kennziffer\\KeQuestionnaire\\Domain\\Model\\AuthCode');
 				$newAuthCode->generateAuthCode($codeLength,$this->storagePid);
 				$newAuthCode->setPid($this->storagePid);
-				$newAuthCode->setEmail($mail);
-				//store the authcode
+				$newAuthCode->setEmail($mail['email']);
+                                switch($mail['sourcetype']) {
+                                    case 'feuser': 
+                                            $userRepository = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Domain\\Repository\\FrontendUserRepository');
+                                            $querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
+                                            $querySettings->setRespectStoragePage(FALSE);
+                                            $userRepository->setDefaultQuerySettings($querySettings);
+                                            $newAuthCode->setFeUser($userRepository->findByUid($mail['uid']));
+                                        break;
+                                    case 'ttaddress':
+                                            $addrRepository = $this->objectManager->get('TYPO3\\TtAddress\\Domain\\Repository\\AddressRepository');
+                                            $querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
+                                            $querySettings->setRespectStoragePage(FALSE);
+                                            $addrRepository->setDefaultQuerySettings($querySettings);
+                                            $newAuthCode->setTtAddress($addrRepository->findByUid($mail['uid']));
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                //store the authcode
 				$this->authCodeRepository->add($newAuthCode);
 				//add mail data to view
 				$this->view->assign('authCode',$newAuthCode);
 				$subject = ($this->plugin['ffdata']['settings']['email']['invite']['subject']?$this->plugin['ffdata']['settings']['email']['invite']['subject']:\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.standard.subject', $this->extensionName));
 				$text['before'] = trim(($this->plugin['ffdata']['settings']['email']['invite']['text']['before']?$this->plugin['ffdata']['settings']['email']['invite']['text']['before']:\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.standard.text.before', $this->extensionName)));
 				$text['after'] = trim(($this->plugin['ffdata']['settings']['email']['invite']['text']['after']?$this->plugin['ffdata']['settings']['email']['invite']['text']['after']:\TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.standard.text.after', $this->extensionName)));
-				$this->view->assign('text',$text);                                
+				foreach ($mail as $field => $value){
+					$text['before'] = str_replace('###'.strtoupper($field).'###', $value, $text['before']);
+					$text['after'] = str_replace('###'.strtoupper($field).'###', $value, $text['after']);
+				}
+				$this->view->assign('text',$text);
+				
 				//create mailSender
 				$this->mailSender
-					->addReceiver($mail)
+					->addReceiver($mail['email'])
 					->setHtml($this->view->render('createdMail'))
 					->setSubject($subject)
 					->sendMail();
 				//store the authCode
-				$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
+				$persistenceManager = $this->objectManager->get('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
 				// @var $persistenceManager \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager 
-				$persistenceManager->persistAll();				
+				$persistenceManager->persistAll();
 			}			
 		}
 		//forward to standard-action
 		$this->forward('authCodes');
+	}
+	
+	/**
+	 * Get the Emails from the members of the chosen fe_groups
+	 * @param array fe_groups
+	 * @return array
+	 */
+	private function getMailsFromFeGroups($fe_groups){
+		$mails = array();
+		
+		foreach ($fe_groups as $uid){
+			$group = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord('fe_groups',$uid);
+			$userRepository = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Domain\\Repository\\FrontendUserRepository');
+			$querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
+			$querySettings->setRespectStoragePage(FALSE);
+			$userRepository->setDefaultQuerySettings($querySettings);
+			$user = $userRepository->findAll();
+			foreach ($user as $use){				
+				foreach ($use->getUsergroup() as $ugroup){
+					if ($uid == $ugroup->getUid() AND $use->getEmail()){
+						$mails[$use->getUid()] = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord('fe_users',$use->getUid());
+					}
+				}
+			}			
+		}	
+		return $mails;
 	}
     
     /**
@@ -271,7 +348,7 @@ class BackendController extends  \Kennziffer\KeQuestionnaire\Controller\Abstract
 		
 		$counter['all'] =  $this->resultRepository->countAllForPid($this->storagePid);
 		$counter['finished'] = $this->resultRepository->countFinishedForPid($this->storagePid);
-                $counter['connected']  = $this->resultRepository->countConnectedForPid($this->storagePid);
+        $counter['connected']  = $this->resultRepository->countConnectedForPid($this->storagePid);
 		$counter['not'] = $counter['all']-$counter['finished'];
 		
 		return $counter;

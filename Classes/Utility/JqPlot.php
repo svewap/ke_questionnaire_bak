@@ -148,56 +148,58 @@ class JqPlot {
 	 * @return string $chart
 	 */
 	public function createSingleBarChart($type, $values, \Kennziffer\KeQuestionnaire\Domain\Model\Question $question, $labels = false){
-		ksort($values);
-		$counter = 0;
-        foreach ($values as $nr => $bar){
-			if ($bar['value'] > $counter ) $counter = $bar['value'];
-			$singleBar .= $bar['value'].',';
-			if ($labels[$nr]) $ticks .= "'".$labels[$nr]."',";
-			else $ticks .= "'".$nr."',";
-            $label_c ++;
-		}	        
-		$singleBar = rtrim($singleBar,',');
-		$ticks = rtrim($ticks,',');
-		$counter += 2;
-		
-		$js = 
-			"
-				var bar = [".$singleBar."];
-				var ticks = [".$ticks."];
-				var plot1 = jQuery.jqplot ('chart_".$type."_".$question->getUid()."', [bar], 
-					{
-						seriesDefaults: {
-							renderer: jQuery.jqplot.BarRenderer,
-							rendererOptions: {
-								fillToZero: true,
-								barMargin: 20,
+		if (is_array($values)){
+			ksort($values);
+			$counter = 0;
+			foreach ($values as $nr => $bar){
+				if ($bar['value'] > $counter ) $counter = $bar['value'];
+				$singleBar .= $bar['value'].',';
+				if ($labels[$nr]) $ticks .= "'".$labels[$nr]."',";
+				else $ticks .= "'".$nr."',";
+				$label_c ++;
+			}	        
+			$singleBar = rtrim($singleBar,',');
+			$ticks = rtrim($ticks,',');
+			$counter += 2;
+			
+			$js = 
+				"
+					var bar = [".$singleBar."];
+					var ticks = [".$ticks."];
+					var plot1 = jQuery.jqplot ('chart_".$type."_".$question->getUid()."', [bar], 
+						{
+							seriesDefaults: {
+								renderer: jQuery.jqplot.BarRenderer,
+								rendererOptions: {
+									fillToZero: true,
+									barMargin: 20,
+								},
+								pointLabels: {
+									show: true, 
+									location: 'n', 
+									edgeTolerance: -15, 
+									hideZeros: true
+								}
 							},
-							pointLabels: {
-								show: true, 
-								location: 'n', 
-								edgeTolerance: -15, 
-								hideZeros: true
-							}
-						},
-						axesDefaults: {
-							tickOptions: {								
-								fontSize: '10pt'
-							},
-							pad: 2							
-						},		
-						axes: {
-							xaxis: {
-								renderer: jQuery.jqplot.CategoryAxisRenderer,
-								ticks: ticks
-							},
-							yaxis: {
-								tickOptions: {formatString: '%#d'},								
+							axesDefaults: {
+								tickOptions: {								
+									fontSize: '10pt'
+								},
+								pad: 2							
+							},		
+							axes: {
+								xaxis: {
+									renderer: jQuery.jqplot.CategoryAxisRenderer,
+									ticks: ticks
+								},
+								yaxis: {
+									tickOptions: {formatString: '%#d'},								
+								}
 							}
 						}
-					}
-				);
-			";
+					);
+				";
+		}
 		return $js;
 	}
        

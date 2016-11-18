@@ -37,7 +37,7 @@ class ArrayValueViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractView
 	 * @param $key string
 	 */	 	
 	public function render($array, $key) {
-		if(is_array($array)) {
+            	if(is_array($array)) {
 			if(array_key_exists($key, $array)) {
 				return $array[$key];
 			}

@@ -97,13 +97,13 @@ class ResultController extends \Kennziffer\KeQuestionnaire\Controller\AbstractCo
 		if ($this->user) $newResult->setFeUser($this->user);
 		//check for the Access-Type
 		switch ($this->settings['accessType']){
-				case 'feUser':
-								$this->checkFeUser();
-						break;
-				case 'authCode':
-								$this->checkAuthCode();
-								$newResult->setAuthCode($this->authCode);
-						break;
+                    case 'feUser':
+                                    $this->checkFeUser();
+                            break;
+                    case 'authCode':
+                                    $this->checkAuthCode();
+                                    $newResult->setAuthCode($this->authCode);
+                            break;
 		}
 		//check questionnaire-dependancy
 		$this->checkDependancy();
@@ -379,7 +379,7 @@ class ResultController extends \Kennziffer\KeQuestionnaire\Controller\AbstractCo
 		$result = $this->modifyResultBeforeSave($updatedResult);
 		$this->resultRepository->update($result);
 		
-        $persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
+                $persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
 		$persistenceManager->persistAll();
 				
 		return $result;
@@ -469,12 +469,27 @@ class ResultController extends \Kennziffer\KeQuestionnaire\Controller\AbstractCo
 			$code = $this->authCodeRepository->findByUid($this->request->getArgument('authCode'));
 			if ($code) {
 				$this->authCode = $code;
+                                if (!$this->authCode->getFirstactive()) {
+                                    $this->authCode->setFirstactive(time());                                    
+                                    $this->authCodeRepository->update($this->authCode);
+                                    
+                                    $persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
+                                    $persistenceManager->persistAll();
+                                }
 				return true;
 			}
 		} elseif ($this->request->hasArgument('code')){
 			$codes = $this->authCodeRepository->findByAuthCode($this->request->getArgument('code'));
+                        //\TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($codes[0], 'code');	exit;
 			if ($codes[0]) {
 				$this->authCode = $codes[0];
+                                if (!$this->authCode->getFirstactive()) {
+                                    $this->authCode->setFirstactive(time());                                    
+                                    $this->authCodeRepository->update($this->authCode);
+                                    
+                                    $persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager');
+                                    $persistenceManager->persistAll();
+                                }
 				return true;
 			}
 		}

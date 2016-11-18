@@ -54,6 +54,42 @@ class AuthCode extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @lazy
 	 */
 	protected $participations;
+        
+        /**
+	 * FeUser
+	 * @lazy
+	 * @var \TYPO3\CMS\Extbase\Domain\Model\FrontendUser
+	 */
+	protected $feUser;
+        
+        /**
+	 * TtAddress
+	 * @lazy
+	 * @var \TYPO3\TtAddress\Domain\Model\Address
+	 */
+	protected $ttAddress;
+        
+        /**
+	 * lastreminder
+	 *
+	 * @var integer
+	 */
+	protected $lastreminder;
+        
+        /**
+	 * firstactive
+	 *
+	 * @var integer
+	 */
+	protected $firstactive;
+        
+        /**
+	 * crdate
+	 *
+	 * @var integer
+	 */
+	protected $crdate;
+        
 
 	/**
 	 * Returns the authCode
@@ -143,6 +179,129 @@ class AuthCode extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
                     $this->participations = $rep->findForAuthCode($this);
             }
             return $this->participations;
+	}
+        
+        /**
+	 * Setter for feUser
+	 *
+	 * @param \TYPO3\CMS\Extbase\Domain\Model\FrontendUser $feUser feUser
+	 * @return void
+	 */
+	public function setFeUser(\TYPO3\CMS\Extbase\Domain\Model\FrontendUser $feUser) {
+		$this->feUser = $feUser;
+	}
+
+	/**
+	 * Getter for feUser
+	 *
+	 * @return \TYPO3\CMS\Extbase\Domain\Model\FrontendUser feUser
+	 */
+	public function getFeUser() {
+		return $this->feUser;
+	}
+        
+        /**
+	 * Setter for ttAddress
+	 *
+	 * @param \TYPO3\TtAddress\Domain\Model\Address $ttAddress ttAddress
+	 * @return void
+	 */
+	public function setTtAddress(\TYPO3\TtAddress\Domain\Model\Address $ttAddress) {
+		$this->ttAddress = $ttAddress;
+	}
+
+	/**
+	 * Getter for ttAddress
+	 *
+	 * @return \TYPO3\TtAddress\Domain\Model\Address ttAddress
+	 */
+	public function getTtAddress() {
+		return $this->ttAddress;
+	}
+        
+        /**
+	 * Returns the lastreminder
+	 *
+	 * @return integer $lastreminder
+	 */
+	public function getLastreminder() {
+		return $this->lastreminder;
+	}
+        
+        /**
+	 * Returns the lastreminder
+	 *
+	 * @return string $lastreminder
+	 */
+	public function getLastreminderDatestring() {
+		return date('d.m.Y H:i',$this->lastreminder);
+	}
+
+	/**
+	 * Sets the lastreminder
+	 *
+	 * @param integer $lastreminder
+	 * @return void
+	 */
+	public function setLastreminder($lastreminder) {
+		$this->lastreminder = $lastreminder;
+	}
+        
+        /**
+	 * Returns the firstactive
+	 *
+	 * @return integer $firstactive
+	 */
+	public function getFirstactive() {
+		return $this->firstactive;
+	}
+        
+        /**
+	 * Returns the firstactive
+	 *
+	 * @return string $firstactive
+	 */
+	public function getFirstactiveDatestring() {
+		return date('d.m.Y H:i',$this->firstactive);
+	}
+
+	/**
+	 * Sets the firstactive
+	 *
+	 * @param integer $firstactive
+	 * @return void
+	 */
+	public function setFirstactive($firstactive) {
+		$this->firstactive = $firstactive;
+	}
+        
+        
+        /**
+	 * Returns the crdate
+	 *
+	 * @return integer $crdate
+	 */
+	public function getCrdate() {
+		return $this->crdate;
+	}
+        
+        /**
+	 * Returns the crdate
+	 *
+	 * @return string $crdate
+	 */
+	public function getCrdateDatestring() {
+		return date('d.m.Y H:i',$this->crdate);
+	}
+
+	/**
+	 * Sets the crdate
+	 *
+	 * @param integer $crdate
+	 * @return void
+	 */
+	public function setCrdate($crdate) {
+		$this->crdate = $crdate;
 	}
 }
 ?>

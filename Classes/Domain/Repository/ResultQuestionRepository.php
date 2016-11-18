@@ -38,11 +38,29 @@ class ResultQuestionRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface All finished results
 	 */
 	public function findByQuestionAndResult($question,$result) {
-        $query = $this->createQuery();
+                $query = $this->createQuery();
 		$query->getQuerySettings()->setRespectStoragePage(FALSE);
         
 		$constraint = $query->equals('result', $result);
-        $constraint = $query->logicalAnd(	
+                $constraint = $query->logicalAnd(	
+                                $query->equals('question', $question),
+                                $constraint
+                        );
+		$query->matching($constraint);
+		return $query->execute();
+	}
+        
+        /**
+	 * @param \Kennziffer\KeQuestionnaire\Domain\Model\QuestionType\Question $question
+	 * @param int $resultId
+	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface All finished results
+	 */
+	public function findByQuestionAndResultId($question,$resultId) {
+                $query = $this->createQuery();
+		$query->getQuerySettings()->setRespectStoragePage(FALSE);
+        
+		$constraint = $query->equals('result', $resultId);
+                $constraint = $query->logicalAnd(	
                                 $query->equals('question', $question),
                                 $constraint
                         );
@@ -56,9 +74,43 @@ class ResultQuestionRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface All finished results
 	 */
 	public function findByQuestionAndResultRaw($question,$result) {
-        $query = $this->createQuery();
+                $query = $this->createQuery();
 		$query->getQuerySettings()->setRespectStoragePage(FALSE);
 		$constraint = $query->equals('result', $result);
+                 $constraint = $query->logicalAnd(	
+			$query->equals('question', $question),
+			$constraint
+		);
+		$query->matching($constraint);
+		return $query->execute(true);
+	}
+        
+    /**
+	 * @param \Kennziffer\KeQuestionnaire\Domain\Model\QuestionType\Question $question
+	 * @param int $result
+	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface All finished results
+	 */
+	public function findByQuestionAndResultIdRaw($question,$resultId) {
+                $query = $this->createQuery();
+		$query->getQuerySettings()->setRespectStoragePage(FALSE);
+		$constraint = $query->equals('result', $resultId);
+                $constraint = $query->logicalAnd(	
+			$query->equals('question', $question),
+			$constraint
+		);
+		$query->matching($constraint);
+		return $query->execute(true);
+	}
+	
+	/**
+	 * @param int $question
+	 * @param int $result
+	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface All finished results
+	 */
+	public function findByQuestionIdAndResultIdRaw($question,$resultId) {
+        $query = $this->createQuery();
+		$query->getQuerySettings()->setRespectStoragePage(FALSE);
+		$constraint = $query->equals('result', $resultId);
         $constraint = $query->logicalAnd(	
 			$query->equals('question', $question),
 			$constraint
@@ -71,7 +123,7 @@ class ResultQuestionRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 	 * get a raw result => no object, only array
 	 */
 	public function findForResultRaw($resultId) {
-        $query = $this->createQuery();
+                $query = $this->createQuery();
 		
 		$query->getQuerySettings()->setRespectStoragePage(FALSE);
 

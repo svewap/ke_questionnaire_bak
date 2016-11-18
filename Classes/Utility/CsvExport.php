@@ -23,7 +23,6 @@ namespace Kennziffer\KeQuestionnaire\Utility;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-use Kennziffer\KeQuestionnaire\Domain\Model\Answer;
 
 /**
  *
@@ -43,7 +42,7 @@ class CsvExport {
 	 * text separator
 	 * @var string
 	 */
-	protected $text;
+	protected $text = '"';
 	
 	/**
 	 * singleMarker
@@ -56,6 +55,12 @@ class CsvExport {
 	 * @var \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult 
 	 */
 	protected $results;
+        
+        /**
+	 * resultsRaw
+	 * @var array
+	 */
+	protected $resultsRaw;
 	
 	/**
 	 * questionRepository
@@ -63,6 +68,27 @@ class CsvExport {
 	 * @var \Kennziffer\KeQuestionnaire\Domain\Repository\QuestionRepository
 	 */
 	protected $questionRepository;
+	
+	/**
+	 * resultRepository
+	 *
+	 * @var \Kennziffer\KeQuestionnaire\Domain\Repository\ResultRepository
+	 */
+	protected $resultRepository;
+	
+	/**
+	 * resultQuestionRepository
+	 *
+	 * @var \Kennziffer\KeQuestionnaire\Domain\Repository\ResultQuestionRepository
+	 */
+	protected $resultQuestionRepository;
+	
+	/**
+	 * resultAnswerRepository
+	 *
+	 * @var \Kennziffer\KeQuestionnaire\Domain\Repository\ResultAnswerRepository
+	 */
+	protected $resultAnswerRepository;
 	
 	/**
 	 * show Question Text
@@ -93,6 +119,11 @@ class CsvExport {
 	 * @var string
 	 */
 	var $newline = "\n";
+        
+        /**
+	 * @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher
+	 */
+	protected $signalSlotDispatcher;
 	
 	
 	/**
@@ -103,6 +134,46 @@ class CsvExport {
 	 */
 	public function injectQuestionRepository(\Kennziffer\KeQuestionnaire\Domain\Repository\QuestionRepository $questionRepository) {
 		$this->questionRepository = $questionRepository;
+	}
+	
+	/**
+	 * injectResultRepository
+	 *
+	 * @param \Kennziffer\KeQuestionnaire\Domain\Repository\ResultRepository $resultRepository
+	 * @return void
+	 */
+	public function injectResultRepository(\Kennziffer\KeQuestionnaire\Domain\Repository\ResultRepository $resultRepository) {
+		$this->resultRepository = $resultRepository;
+	}
+	
+	/**
+	 * injectResultQuestionRepository
+	 *
+	 * @param \Kennziffer\KeQuestionnaire\Domain\Repository\ResultQuestionRepository $resultQuestionRepository
+	 * @return void
+	 */
+	public function injectResultQuestionRepository(\Kennziffer\KeQuestionnaire\Domain\Repository\ResultQuestionRepository $resultQuestionRepository) {
+		$this->resultQuestionRepository = $resultQuestionRepository;
+	}
+	
+	/**
+	 * injectResultAnswerRepository
+	 *
+	 * @param \Kennziffer\KeQuestionnaire\Domain\Repository\ResultAnswerRepository $resultAnswerRepository
+	 * @return void
+	 */
+	public function injectResultAnswerRepository(\Kennziffer\KeQuestionnaire\Domain\Repository\ResultAnswerRepository $resultAnswerRepository) {
+		$this->resultAnswerRepository = $resultAnswerRepository;
+	}
+        
+        /**
+	 * inject signal slots
+	 *
+	 * @param \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher
+	 * @return void
+	 */
+	public function injectSignalSlotDispatcher(\TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher) {
+		$this->signalSlotDispatcher = $signalSlotDispatcher;
 	}
 	
 	
@@ -168,6 +239,22 @@ class CsvExport {
 	 */
 	public function setResults(\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult  $results){
 		$this->results = $results;
+	}
+        
+        /**
+	 * Getter Separator
+	 * @return array
+	 */
+	public function getResultsRaw(){
+		return $this->resultsRaw;
+	}
+        
+        /**
+	 * Setter Results
+	 * @param array  $results
+	 */
+	public function setResultsRaw(array  $results){
+		$this->resultsRaw = $results;
 	}
 	
 	/**
@@ -255,18 +342,38 @@ class CsvExport {
 	/**
 	 * create the CSV string
 	 * 
+	 * @param array $plugin
+	 * @return string
+	 */
+	public function createResultBased($plugin){
+		$csv = '';
+		
+		$csv .= $this->createRBHeader($plugin);
+		$csv .= $this->newline;
+				
+		$csv .= $this->createRBLines($plugin);
+				
+		return $csv;
+	}
+	
+	/**
+	 * create the CSV string
+	 * 
 	 * @param array $authCodes
 	 * @return string
 	 */
 	public function createAuthCodes($authCodes){
-		$csv = '';
+		$this->csv = '';
 		
-		foreach ($authCodes as $code){
-			$csv .= $code->getAuthCode();
-			$csv .= $this->newline;
+                foreach ($authCodes as $code){
+			$this->csv .= $code->getAuthCode();
+			$this->csv .= $this->newline;
 		}
-				
-		return $csv;
+                
+                //SignalSlot for Action
+                $this->signalSlotDispatcher->dispatch(__CLASS__, 'createAuthCodes', array($this,$authCodes));
+						
+		return $this->csv;
 	}
 	
 	/**
@@ -281,22 +388,82 @@ class CsvExport {
 		$header .= $this->text.$plugin['header'].$this->text;
 		$header .= $this->newline.$this->newline;
 		
-		$header .= $this->getText(). 'Question ID'.$this->getText().$this->getSeparator();
-		$header .= $this->getText().'Question-Title'.$this->getText().$this->getSeparator();
-		if ($this->getShowQText()) $header .= $this->getText().'Question-Text'.$this->getText().$this->getSeparator();
-		$header .= $this->getText().'Answer-Title'.$this->getText().$this->getSeparator();
-		if ($this->getShowAText()) $header .= $this->getText().'Answer-Text'.$this->getText().$this->getSeparator();
+		$header .= 'Question ID'.$this->getSeparator();
+		$header .= 'Question-Title'.$this->getSeparator();
+		if ($this->getShowQText()) $header .= 'Question-Text'.$this->getSeparator();
+		$header .= 'Answer-Title'.$this->getSeparator();
+		if ($this->getShowAText()) $header .= 'Answer-Text'.$this->getSeparator();
 		$header .= $this->newline;
 		
 		if ($this->getShowQText()) $header .= $this->getSeparator();
 		$header .= $this->getSeparator();
-		$header .= $this->getText().'Participation'.$this->getText().$this->getSeparator();
+		$header .= 'Participation';
+		$header .= $this->getSeparator();
 		if ($this->getShowAText()) $header .= $this->getSeparator();
-		foreach ($this->results as $result){
+		foreach ($this->resultsRaw as $result){
 			$header .= $this->getSeparator();
-			$header .= $result->getUid();
+			$header .= $result['uid'];
 		}
 		$header.= $this->newline;
+		
+		return $header;
+	}
+	
+	/**
+	 * create the header infos
+	 * 
+	 * @param array $plugin
+	 * @return string
+	 */
+	protected function createRBHeader($plugin){
+		$this->RBStruct = array();
+		$header = '';
+		
+		$header .= $this->text.$plugin['header'].$this->text;
+		$header .= $this->newline.$this->newline;
+		
+		$header .= 'Result ID'.$this->getSeparator();
+		$header .= 'Question ID'.$this->getSeparator();
+		
+		$empty_cols = 1;
+		$qL = array();
+		$qL2 = array();		
+		$aL = array();
+		$aL2 = array();
+		for ($i = 0; $i < $empty_cols; $i++){
+			$qL2[] = '';
+			$aL[] = '';
+			$aL2[] = '';
+		}
+		$qL2[] = 'Question Title';
+		$aL[] = 'Answer ID';
+		$aL2[] = 'Answer Title';
+		$questions = $this->getQuestions($plugin);
+		foreach ($questions as $question){
+			if ($question->getShortType() == 'Question'){
+				$this->RBStruct[$question->getUid()] = array();
+				//$qL[] = $question->getUid();
+				//$qL2[] = $this->text.$question->getTitle().$this->text;
+				
+				foreach ($question->getAnswers() as $answer){
+					if ($answer->exportInCsv()){
+						$this->RBStruct[$question->getUid()][$answer->getUid()] = 1;
+						$qL[] = $question->getUid();
+						$qL2[] = $this->text.$question->getTitle().$this->text;
+						$aL[] = $answer->getUid();
+						$aL2[] = $this->text.$answer->getTitle().$this->text;
+					}
+				}
+			}
+		}
+		$questionHeader = implode($this->separator,$qL).$this->newline;
+		$header .= $questionHeader;				
+		$questionHeader2 = implode($this->separator,$qL2).$this->newline;
+		$header .= $questionHeader2;				
+		$answerHeader = implode($this->separator,$aL).$this->newline;
+		$header .= $answerHeader;				
+		$answerHeader2 = implode($this->separator,$aL2).$this->newline;
+		$header .= $answerHeader2;				
 		
 		return $header;
 	}
@@ -375,7 +542,7 @@ class CsvExport {
 				$questionLine = implode($this->separator,$qL).$this->newline;
 				$lines .= $questionLine;
 				
-				/** @var Answer $answer */
+				
 				foreach ($question->getAnswers() as $answer){
 					if ($answer->exportInCsv()){
 						$options = array();
@@ -386,11 +553,62 @@ class CsvExport {
 						if ($this->getShowQText()) $options['emptyFields'] = 3;
 						else $options['emptyFields'] = 2;
 						$options['showAText'] = $this->getShowAText();
-						$answerLine = $answer->getCsvLine($this->results,$question, $options);
+						$answerLine = $answer->getCsvLine($this->resultsRaw,$question, $options);
 						$lines .= $answerLine;
 					}
 				}
 			}
+		}
+		return $lines;
+	}
+	
+	/**
+	 * create the lines of the csv
+	 * @param array $plugin
+	 * @return string
+	 */
+	protected function createRBLines($plugin){
+		$lines = '';
+		//\TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($this->RBStruct, 'struct');
+		foreach ($this->resultsRaw as $result){
+			$rL = array();
+			$rL[] = $result['uid'];
+			$rL[] = '';			
+			$rAnswers = $this->resultRepository->collectRAnswersForCSVRBExport($result['uid']);
+			//\TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($rAnswers, 'ranswers');
+			foreach ($this->RBStruct as $questionId => $answers){
+				//$resultQuestion = $this->resultQuestionRepository->findByQuestionIdAndResultIdRaw($questionId, $result['uid']);
+				//$resultQuestion = $resultQuestion[0];
+				//\TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($resultQuestion, 'rQ');
+				/*foreach ($answers as $answerId => $val){
+					$resultAnswer = $this->resultAnswerRepository->findForResultQuestionAndAnswerRaw($resultQuestion['uid'],$answerId);
+					if ($resultAnswer['value'] == $answerId) $rL[] = $this->getSingleMarker();
+					else $rL[] = '';
+				}*/
+				$exportAnswers = array();
+				foreach($rAnswers as $rA){
+					if ($rA['q_uid'] == $questionId){
+						if ($answers[$rA['a_uid']] == 1){
+							$exportAnswers[$rA['a_uid']] = $rA['ra_value'];
+							if ($rA['ra_add_value']){
+								if ($rA['a_uid'] == $rA['ra_value']) $exportAnswers[$rA['a_uid']] = $rA['ra_add_value'];
+								else $exportAnswers[$rA['a_uid']] .= ' ('.$rA['ra_add_value'].')';
+							}
+						}
+					}
+				}
+				//\TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($exportAnswers, 'Eanswers');
+				
+				foreach ($answers as $answerId => $aVal){
+					$val = '';
+					if ($exportAnswers[$answerId]) {
+						if ($exportAnswers[$answerId] == $answerId) $val = $this->getSingleMarker();
+						else $val = $this->getText(). preg_replace("/\r|\n/", "", str_replace($this->getText(),'',$exportAnswers[$answerId])) .$this->getText();
+					}
+					$rL[] = $val;
+				}
+			}
+			$lines .= implode($this->separator,$rL).$this->newline;
 		}
 		return $lines;
 	}
@@ -430,9 +648,23 @@ class CsvExport {
 	/**
 	 * start the interval Export
 	 * 
+	 * @param array $plugin
+	 * @param string $csvString
+	 */
+	public function finishRbIntervalExport($plugin, $csvString){
+		$csv = $this->createRBHeader($plugin);
+		//if ($this->getTotalPoints()) $csv .= $this->createTotalPointsLine();
+		$csv .= $csvString;
+				
+		return $csv;
+	}
+	
+	/**
+	 * start the interval Export
+	 * 
 	 * @param array $oldContent
 	 */
-	public function processIntervalExport($plugin, $oldContent){
+	public function processQbIntervalExport($plugin, $oldContent){
         $oldArray = array();
 		if ($oldContent) $oldArray = $this->parseCsv($oldContent);
 		$lines = '';
@@ -469,7 +701,7 @@ class CsvExport {
 								$counter ++;
 							}
 						} else {
-							$answerLine = $answer->getCsvLineValues($this->results,$question, $options);	
+							$answerLine = $answer->getCsvLineValues($this->resultsRaw,$question, $options);	
 							$oldValues = '';
 							if (is_array($oldArray[$counter])){
 								//$oldValues = implode($this->getSeparator(),$oldArray[$counter]);
@@ -486,6 +718,17 @@ class CsvExport {
 				}
 			}
 		}
+		return $lines;
+	}
+	
+	/**
+	 * start the interval Export
+	 * 
+	 * @param array $oldContent
+	 */
+	public function processRbIntervalExport($plugin, $oldContent){
+		$header = $this->createRBHeader($plugin);
+        $lines = $oldContent.$this->createRBLines($plugin);
 		return $lines;
 	}
 	

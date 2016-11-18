@@ -37,7 +37,7 @@ class ResultAnswerRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	 * get a raw result => no object, only array
 	 */
 	public function findForResultQuestionRaw($questionId) {
-        $query = $this->createQuery();
+                $query = $this->createQuery();
 		
 		$query->getQuerySettings()->setRespectStoragePage(FALSE);
 
@@ -47,10 +47,25 @@ class ResultAnswerRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	}
 	
 	/**
+	 * get a raw result => no object, only array
+	 */
+	public function findForResultQuestionAndAnswerRaw($questionId,$answerId) {
+		$query = $this->createQuery();
+		$query->getQuerySettings()->setRespectStoragePage(FALSE);
+		$constraint = $query->equals('resultquestion', $questionId);
+        $constraint = $query->logicalAnd(	
+			$query->equals('answer', $answerId),
+			$constraint
+		);
+		$query->matching($constraint);
+		return $query->execute(true);
+	}
+	
+	/**
 	 * find resultanswer for answer
 	 */
 	public function findForAnswer($answer) {
-        $query = $this->createQuery();
+                $query = $this->createQuery();
 		
 		$query->getQuerySettings()->setRespectStoragePage(FALSE);
 		
@@ -63,7 +78,7 @@ class ResultAnswerRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	 * get a raw result => no object, only array
 	 */
 	public function findForAnswerRaw($answer) {
-        $query = $this->createQuery();
+                $query = $this->createQuery();
 		
 		$query->getQuerySettings()->setRespectStoragePage(FALSE);
 

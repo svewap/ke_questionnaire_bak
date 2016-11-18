@@ -67,6 +67,16 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
 	 * @var integer
 	 */
 	protected $csvExportInterval;
+        
+        /**
+	 * Premium
+	 *
+	 * @var array
+	 */
+	public $premium;
+
+
+    protected $separator;
 
 
 
@@ -85,6 +95,12 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
 		} else {
 			throw new \Kennziffer\KeQuestionnaire\Exception('saveExtConf', 1349685793);
 		}
+                if(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('ke_questionnaire_premium')) {
+                    $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ke_questionnaire_premium']);
+                    if (is_array($extConf)) {
+                        $this->premium = $extConf;
+                    }
+                }
 	}
 
 	/**
@@ -181,6 +197,25 @@ class ExtConf implements \TYPO3\CMS\Core\SingletonInterface {
 	public function setCsvExportInterval($csvExportInterval) {
 		$this->csvExportInterval = $csvExportInterval;
 	}
+
+    /**
+     * @return mixed
+     */
+    public function getSeparator()
+    {
+        return $this->separator;
+    }
+
+    /**
+     * @param mixed $separator
+     */
+    public function setSeparator($separator)
+    {
+        $this->separator = $separator;
+    }
+
+
+
 
 }
 ?>

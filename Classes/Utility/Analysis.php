@@ -178,7 +178,8 @@ class Analysis {
 				case 'SingleSelect':				
 					foreach ($values as $nr => $data){
 						$plotValues = $data['values'];
-						$divs .= '<h5>'.$data['answer']->getTitle().'</h5>';
+						if ($data['answer']) $divs .= '<h5>'.$data['answer']->getTitle().'</h5>';
+						else $divs .= '<h5>...</h5>';
 						$divs .= '<div id="chart_'.$type.'_'.$atype.'_'.$nr.'_'.$question->getUid().'" style="height:300px; width:500px;"></div>'."\n";
 						$charts .= $this->jqPlot->getChart($chartType, $type.'_'.$atype.'_'.$nr, $plotValues, $question, $data['labels'])."\n";
 					}

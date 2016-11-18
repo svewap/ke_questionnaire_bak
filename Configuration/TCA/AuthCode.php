@@ -6,10 +6,10 @@ if (!defined ('TYPO3_MODE')) {
 $TCA['tx_kequestionnaire_domain_model_authcode'] = array(
 	'ctrl' => $TCA['tx_kequestionnaire_domain_model_authcode']['ctrl'],
 	'interface' => array(
-		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, auth_code, email',
+		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, auth_code, email, lastreminder, firstactive',
 	),
 	'types' => array(
-		'1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, auth_code, email,--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.access,starttime, endtime'),
+		'1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, auth_code, email, lastreminder,firstactive,--div--;LLL:EXT:cms/locallang_ttc.xml:tabs.access,starttime, endtime'),
 	),
 	'palettes' => array(),
 	'columns' => array(
@@ -110,6 +110,51 @@ $TCA['tx_kequestionnaire_domain_model_authcode'] = array(
 				'size'	 => '100',
 				'max'	  => '255'
 			)
+		),
+                'fe_user' => array(
+			'config' => array(
+				'type' => 'passthrough',
+			),
+		),
+                'tt_address' => array(
+			'config' => array(
+				'type' => 'passthrough',
+			),
+		),
+                'lastreminder' => array(
+			'exclude' => 1,
+			'label' => 'LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_db.xml:tx_kequestionnaire_domain_model_authcode.lastreminder',
+			'config' => array(
+				'type' => 'input',
+				'size' => 13,
+				'max' => 20,
+				'eval' => 'datetime',
+				'checkbox' => 0,
+				'default' => 0,
+				'range' => array(
+					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
+				),
+			),
+		),
+                'firstactive' => array(
+			'exclude' => 1,
+			'label' => 'LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_db.xml:tx_kequestionnaire_domain_model_authcode.firstactive',
+			'config' => array(
+				'type' => 'input',
+				'size' => 13,
+				'max' => 20,
+				'eval' => 'datetime',
+				'checkbox' => 0,
+				'default' => 0,
+				'range' => array(
+					'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
+				),
+			),
+		),
+                'crdate' => array(
+			'config' => array(
+				'type' => 'passthrough',
+			),
 		),
 	),
 );

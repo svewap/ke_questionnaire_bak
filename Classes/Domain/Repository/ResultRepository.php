@@ -105,6 +105,27 @@ class ResultRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		
 		return $query->execute(true);
 	}
+        
+        /**
+	 * find all results for pid
+	 * 
+	 * @param integer $pid
+	 * @param integer $interval
+	 * @param integer $position
+	 * @return Query Result
+	 */
+	public function findAllForPidIntervalRaw($pid, $interval, $position) {	
+		$interval = intval($interval);
+		$position = intval($position);
+		if ($interval == 0) $interval = 1;
+		
+		$query = $this->createQuery();
+		$query->getQuerySettings()->setRespectStoragePage(FALSE);
+		$query->matching($query->equals('pid', $pid));
+		$query->setLimit($interval);
+		$query->setOffset($position);
+		return $query->execute(true);
+	}
     
     /**
 	 * find all results for pid
@@ -134,6 +155,23 @@ class ResultRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 						$query->equals('pid', $pid)
 				))->execute();
 	}
+        
+        /**
+	 * find all finished results for pid
+	 *
+	 * @param integer $pid
+	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface All finished results
+	 */
+	public function findFinishedForPidRaw($pid) {
+		$query = $this->createQuery();
+		$query->getQuerySettings()->setRespectStoragePage(FALSE);
+		$query->matching(
+				$query->logicalAnd(	
+						$query->greaterThan('finished', 0),
+						$query->equals('pid', $pid)
+				))->execute();
+                return $query->execute(true);
+	}
 	
 	/**
 	 * find all finished results for pid
@@ -158,6 +196,30 @@ class ResultRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 						$query->equals('pid', $pid)
 				))->execute();
 	}
+        
+        /**
+	 * find all finished results for pid
+	 *
+	 * @param integer $pid
+	 * @param integer $interval
+	 * @param integer $position
+	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface All finished results
+	 */
+	public function findFinishedForPidIntervalRaw($pid, $interval, $position) {
+		$interval = intval($interval);
+		$position = intval($position);
+		if ($interval == 0) $interval = 1;
+		//\TYPO3\CMS\Core\Utility\GeneralUtility::devlog('arguments','keq',2,array($pid, $interval, $position));
+		$query = $this->createQuery();
+		$query->getQuerySettings()->setRespectStoragePage(FALSE);
+		$query->setLimit($interval);
+		$query->setOffset($position);
+		return $query->matching(
+				$query->logicalAnd(	
+						$query->greaterThan('finished', 0),
+						$query->equals('pid', $pid)
+				))->execute(true);
+	}
     
     /**
 	 * find all finished results for pid
@@ -173,7 +235,8 @@ class ResultRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 						$query->greaterThan('finished', 0),
 						$query->equals('pid', $pid)
 				))->count();
-	}
+	}        
+    
     
     /**
 	 * find all finished results for pid
@@ -236,6 +299,27 @@ class ResultRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	 */
 	public function clearRATable() {
 		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_kequestionnaire_domain_model_resultanswer','resultquestion = 0');
+	}
+	
+	/**
+	 * 
+	 * @param integer $resultId
+	 */
+	public function collectRAnswersForCSVRBExport($resultId){
+		$query = $this->createQuery();
+		$query->statement('SELECT tx_kequestionnaire_domain_model_resultquestion.uid as rq_uid, tx_kequestionnaire_domain_model_resultanswer.uid as ra_uid,
+tx_kequestionnaire_domain_model_resultanswer.value as ra_value,
+tx_kequestionnaire_domain_model_resultanswer.additional_value as ra_add_value,
+(SELECT tx_kequestionnaire_domain_model_question.uid FROM tx_kequestionnaire_domain_model_question WHERE tx_kequestionnaire_domain_model_resultquestion.question = tx_kequestionnaire_domain_model_question.uid) as q_uid,
+(SELECT tx_kequestionnaire_domain_model_answer.uid FROM tx_kequestionnaire_domain_model_answer WHERE tx_kequestionnaire_domain_model_resultanswer.answer = tx_kequestionnaire_domain_model_answer.uid) as a_uid
+FROM 
+tx_kequestionnaire_domain_model_resultanswer 
+Left join
+tx_kequestionnaire_domain_model_resultquestion on
+tx_kequestionnaire_domain_model_resultanswer.resultquestion = tx_kequestionnaire_domain_model_resultquestion.uid
+where 
+tx_kequestionnaire_domain_model_resultquestion.result ='.$resultId);
+		return $query->execute(true);
 	}
 }
 ?>

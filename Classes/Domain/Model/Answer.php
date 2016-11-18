@@ -244,7 +244,7 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 			$aL[] = '';
 		}
 		//title of answer
-		$aL[] = $options['textMarker'].$this->getTitle().$options['textMarker'];
+		$aL[] = $this->getTitle();
 		//if the answer-text should be shown
 		if ($options['showAText']) {
 			$aL[] = strip_tags($this->getText());
@@ -257,75 +257,70 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	
 	/**
 	 * Create the data of the Csv Line
-	 * @param \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $results
+	 * @param array $results
 	 * @param \Kennziffer\KeQuestionnaire\Domain\Model\Question $question
-	 * @param array $options
+	 * @param array options
 	 * @return string
 	 */
-	public function getCsvLineValues(\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $results, \Kennziffer\KeQuestionnaire\Domain\Model\Question $question, $options = array()) {
-
-		$aL = [];
-		$addL = [];
-		$hasAddL = false;
+	public function getCsvLineValues(array $results, \Kennziffer\KeQuestionnaire\Domain\Model\Question $question, $options = array()) {
+		$line = '';
+        $hasAddL = false;
+        $aL = [];
 		//for each results get the values
-		/** @var Result $result */
+		$this->objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+		$repRA = $this->objectManager->get('Kennziffer\\KeQuestionnaire\\Domain\\Repository\\ResultAnswerRepository');
+        $repRQ = $this->objectManager->get('Kennziffer\\KeQuestionnaire\\Domain\\Repository\\ResultQuestionRepository');
 		foreach ($results as $result){
-			$rAnswer = $result->getAnswer($question->getUid(), $this->getUid());
+			//$rAnswer = $result->getAnswer($question->getUid(), $this->getUid());
+                        $rQuestion = $repRQ->findByQuestionAndResultIdRaw($question, $result['uid']);
+                        $rAnswer = $repRA->findForResultQuestionRaw($rQuestion[0]['uid']);
+                        $rAnswer = $rAnswer[0];
+                        //\TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($rQuestion, 'rQuestion');
+                        //\TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($rAnswer, 'rAnswer');
+                        //exit;
 			if ($rAnswer) {
-				$val = $this->getCsvValue($rAnswer,$options);
-
-				if ($rAnswer->getAdditionalValue()){
-					$addL[count($aL)-1] = $rAnswer->getAdditionalValue();
-					$val .= ",".$rAnswer->getAdditionalValue();
-					$hasAddL = false;
+				$aL[] = $this->getCsvValueRaw($rAnswer,$options);
+				if ($rAnswer AND $rAnswer['additionalValue']){
+					$addL[count($aL)-1] = preg_replace("/\r|\n/", "", str_replace($options['textMarker'],'',$rAnswer['additionalValue']));
+					$hasAddL = true;
 				};
-				$aL[] = $val;
 			} else $aL[] = '';
 		}		
-
-		//insert text-markers
-		foreach ($aL as $nr => $value){
-			if (!is_numeric($value)) $aL[$nr] = $options['textMarker']. preg_replace("/\r|\n/", "", str_replace($options['textMarker'],'',$value)).$options['textMarker'];
-		}
-		//implode the csv
-		$line = implode($options['separator'],$aL).$options['newline'];
-
-		//if there is additional text add a line
-		if ($hasAddL){
-			$addLine = array();
-
-			for ($i = 0; $i < ($options['emptyFields']+1); $i++){
-				$addLine[] = '';
-			}
-			if ($options['showAText']) {
-				$addLine[] = '';
-			}
-
+		if (is_array($aL)){
+			//insert text-markers
 			foreach ($aL as $nr => $value){
-				if (isset($addL[$nr]))	{
-					if (!is_numeric($addL[$nr])) $addLine[] = $options['textMarker'].preg_replace( "/\r|\n/", "", str_replace($options['textMarker'],'',$addL[$nr])).$options['textMarker'];
-				} else $addLine[] = '';
-
+				if (!is_numeric($value)) $aL[$nr] = $options['textMarker']. preg_replace("/\r|\n/", "", str_replace($options['textMarker'],'',$value)) .$options['textMarker'];
 			}
-			$line .= implode($options['separator'],$addLine).$options['newline'];
-		}
+			//implode the csv
+			$line = implode($options['separator'],$aL).$options['newline'];
+			//if there is additional text add a line
+			if ($hasAddL){
+				$addLine = array();
+				foreach ($aL as $nr => $value){
+					if ($addL[$nr])	{
+						if (!is_numeric($addL[$nr])) $addLine[] = $options['textMarker']. preg_replace( "/\r|\n/", "", str_replace($options['textMarker'],'',$addL[$nr])).$options['textMarker'];
+					} else $addLine[] = '';
 
+				}
+				$line .= implode($options['separator'],$addLine);
+			}
+		}
 		
 		return $line;
 	}
 	
 	/**
 	 * Create the whole Csv Line
-	 * @param \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $results
+	 * @param array $results
 	 * @param \Kennziffer\KeQuestionnaire\Domain\Model\Question $question
-	 * @param array $options
+	 * @param array options
 	 * @return string
 	 */
-	public function getCsvLine(\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $results, \Kennziffer\KeQuestionnaire\Domain\Model\Question $question, $options = array()) {
+	public function getCsvLine(array $results, \Kennziffer\KeQuestionnaire\Domain\Model\Question $question, $options = array()) {
 		
 		$line = $this->getCsvLineHeader($question, $options);
 		$line .= $this->getCsvLineValues($results, $question, $options);
-		
+
 		return $line;
 	}
 
@@ -336,7 +331,17 @@ class Answer extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @return string
 	 */
 	public function getCsvValue(\Kennziffer\KeQuestionnaire\Domain\Model\ResultAnswer $rAnswer, $options = array()){
-		return $rAnswer->getValue();
+		return preg_replace("/\r|\n/", "", str_replace('"','',$rAnswer->getValue()));
+	}
+        
+        /**
+	 * return the Value shown in the Csv Export
+	 * @param array $rAnswer
+	 * @param array $options
+	 * @return string
+	 */
+	public function getCsvValueRaw(array $rAnswer, $options = array()){
+        return preg_replace("/\r|\n/", "", str_replace('"','',$rAnswer['value']));
 	}
     
     /**

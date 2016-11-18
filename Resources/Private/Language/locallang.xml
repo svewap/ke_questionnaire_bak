@@ -45,6 +45,8 @@
 			<label index="tx_kequestionnaire_domain_model_authcode">Authentication Code</label>
 			<label index="tx_kequestionnaire_domain_model_authcode.auth_code">Authentication Code</label>
 			<label index="tx_kequestionnaire_domain_model_authcode.email">E-Mail</label>
+                        <label index="tx_kequestionnaire_domain_model_authcode.lastreminder">Last time a reminder mail was send</label>
+                        <label index="tx_kequestionnaire_domain_model_authcode.firstactive">First time the authCode was used</label>
 
 			<label index="flashmessage.Result.mandatory">One of the questions was mandatory</label>
 			<label index="flashmessage.Result.mustBeCorrect">One or more questions have to be answered correctly</label>
@@ -121,6 +123,15 @@
 
 			<label index="points.maxInfo">Maximum Points you could have achieved in this questionnaire: </label>
 			<label index="points.yourInfo">Points achieved in this questionnaire: </label>
+                        
+                        <label index="list.table.authCode">Authentication code</label>
+			<label index="list.table.email">E-mail</label>
+                        <label index="list.table.sendDate">send Date</label>
+			<label index="list.table.participations">Participations</label>
+                        <label index="list.table.startDate">Date started</label>
+                        <label index="list.table.finishedDate">Date finished</label>
+                        <label index="list.table.lastreminder">last reminder</label>
+                        <label index="list.table.firstactive">first use</label>
                 </languageKey>
 		<languageKey index="de" type="array">
 			<label index="tx_kequestionnaire_domain_model_question">KeQ Inhaltselement</label>
@@ -166,6 +177,8 @@
 			<label index="tx_kequestionnaire_domain_model_authcode">Authentication Code</label>
 			<label index="tx_kequestionnaire_domain_model_authcode.auth_code">Authentication Code</label>
 			<label index="tx_kequestionnaire_domain_model_authcode.email">E-Mail</label>
+                        <label index="tx_kequestionnaire_domain_model_authcode.lastreminder">Datum der letzten Erinnerung</label>
+                        <label index="tx_kequestionnaire_domain_model_authcode.firstactive">Erster Aufruf des AuthCodes</label>
 
 			<label index="flashmessage.Result.mandatory">Eine der Fragen ist eine Pflichtfrage</label>
 			<label index="flashmessage.Result.mustBeCorrect">Eine oder mehrere der Fragen müssen korrekt beantwortet werden</label>
@@ -242,6 +255,15 @@
 
 			<label index="points.maxInfo">Maximale Anzahl an Punkten, die in diesem Fragebogen zu erreichen waren: </label>
 			<label index="points.yourInfo">Erreichte Punktzahl in diesem Fragebogen: </label>
+                        
+                        <label index="list.table.authCode">Authentication Code</label>
+			<label index="list.table.email">E-Mail</label>
+                        <label index="list.table.sendDate">Mail erhalten</label>
+			<label index="list.table.participations">Teilnahmen</label>
+                        <label index="list.table.startDate">Info gelesen</label>
+                        <label index="list.table.finishedDate">Teilnahme bestätigt</label>
+                        <label index="list.table.lastreminder">letzte Erinnerung</label>
+                        <label index="list.table.firstactive">erster Aufruf</label>
 		</languageKey>
 	</data>
 </T3locallang>

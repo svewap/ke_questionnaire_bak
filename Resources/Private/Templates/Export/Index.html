@@ -26,7 +26,7 @@
 		<ul class="keq_list">
 		<f:for each="{questionnaires}" as="questionnaire">
 			<li>
-				<f:link.action action="csv" controller="Export" arguments="{pluginUid:questionnaire.uid}">{questionnaire.header}&nbsp;
+				<f:link.action action="csvRb" controller="Export" arguments="{pluginUid:questionnaire.uid}">{questionnaire.header}&nbsp;
 				(<f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_analyse.xml:count" />{questionnaire.countFinishedResults}/{questionnaire.countResults})</f:link.action>
 			</li>			
 		</f:for>

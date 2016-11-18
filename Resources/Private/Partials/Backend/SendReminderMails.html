@@ -1,3 +1,5 @@
+{namespace ke=Kennziffer\KeQuestionnaire\ViewHelpers}
+{namespace kep=Kennziffer\KeQuestionnairePremium\ViewHelpers}
 <f:if condition="{authCodes}">
         <f:then>
             <f:form action="remindAndMailAuthCodes" controller="Backend" method="post">
@@ -5,33 +7,40 @@
                 <b><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:codes.existing" /></b><br />
                 <br />
                 <table>
-                        <tr>
-                            <th style="width:10px;text-align: center"></th>
-                            <th style="width:200px"><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:list.table.authCode" /></th>
-                            <th style="width:200px"><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:list.table.email" /></th>
-                            <th><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:list.table.participations" /></th>
-                        </tr>
-                <f:for each="{authCodes}" as="code">
-                        <tr>
-                            <td>
-                                <f:if condition="{code.email}"><f:form.checkbox name="reminder[]" value="{code.uid}" checked="{f:if(condition:'{code.AndLoadParticipations}',then:'false',else:'true')}" /></f:if>
-                            </td>
-                            <td>{code.authCode}</td>
-                            <td>{code.email}</td>
-                            <td>
-                                    <f:for each="{code.participations}" as="participation">
-                                            <f:if condition="{participation.finished}">
-                                                    <f:then>
-                                                            <span class="finishedParticipation"><f:link.action action="downloadPdf" controller="Export" arguments="{pdfType:'filled',selectedResult:participation.uid, pluginUid:plugin.uid}">{participation.uid}</f:link.action></span>
-                                                    </f:then>
-                                                    <f:else>
-                                                            <span class="openParticipation"><f:link.action action="downloadPdf" controller="Export" arguments="{pdfType:'filled',selectedResult:participation.uid, pluginUid:plugin.uid}">{participation.uid}</f:link.action></span>
-                                                    </f:else>
-                                            </f:if>
-                                    </f:for>
-                            </td>
-                        </tr>
-                </f:for>
+                    <f:if condition="{ke:premiumLoaded()}">
+                        <f:then>
+                           <kep:authCodesTtAddressList arguments="{authCodes:authCodes,type:'mailer'}"/> 
+                        </f:then>
+                        <f:else>
+                            <tr>
+                                <th style="width:10px;text-align: center"></th>
+                                <th style="width:200px"><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:list.table.authCode" /></th>
+                                <th style="width:200px"><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:list.table.email" /></th>
+                                <th><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:list.table.participations" /></th>
+                            </tr>
+                            <f:for each="{authCodes}" as="code">
+                            <tr>
+                                <td>
+                                    <f:if condition="{code.email}"><f:form.checkbox name="reminder[]" value="{code.uid}" checked="{f:if(condition:'{code.AndLoadParticipations}',then:'false',else:'true')}" /></f:if>
+                                </td>
+                                <td>{code.authCode}</td>
+                                <td>{code.email}</td>
+                                <td>
+                                        <f:for each="{code.participations}" as="participation">
+                                                <f:if condition="{participation.finished}">
+                                                        <f:then>
+                                                                <span class="finishedParticipation"><f:link.action action="downloadPdf" controller="Export" arguments="{pdfType:'filled',selectedResult:participation.uid, pluginUid:plugin.uid}">{participation.uid}</f:link.action></span>
+                                                        </f:then>
+                                                        <f:else>
+                                                                <span class="openParticipation"><f:link.action action="downloadPdf" controller="Export" arguments="{pdfType:'filled',selectedResult:participation.uid, pluginUid:plugin.uid}">{participation.uid}</f:link.action></span>
+                                                        </f:else>
+                                                </f:if>
+                                        </f:for>
+                                </td>
+                            </tr>
+                            </f:for>
+                        </f:else>
+                    </f:if>
                 </table>
                 <br />
                 <f:form.submit value="{f:translate(key: 'LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:mail.remindSubmit')}" />

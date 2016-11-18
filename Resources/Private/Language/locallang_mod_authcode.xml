@@ -57,7 +57,12 @@
 
 			<label index="list.table.authCode">Authentication code</label>
 			<label index="list.table.email">E-mail</label>
+                        <label index="list.table.sendDate">send Date</label>
 			<label index="list.table.participations">Participations</label>
+                        <label index="list.table.startDate">Date started</label>
+                        <label index="list.table.finishedDate">Date finished</label>
+                        <label index="list.table.lastreminder">last reminder</label>
+                        <label index="list.table.firstactive">first use</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="mlang_tabs_tab">Authentication Codes</label>
@@ -110,7 +115,12 @@
 
 			<label index="list.table.authCode">Authentication Code</label>
 			<label index="list.table.email">E-Mail</label>
+                        <label index="list.table.sendDate">Mail erhalten</label>
 			<label index="list.table.participations">Teilnahmen</label>
+                        <label index="list.table.startDate">Info gelesen</label>
+                        <label index="list.table.finishedDate">Teilnahme bestätigt</label>
+                        <label index="list.table.lastreminder">letzte Erinnerung</label>
+                        <label index="list.table.firstactive">erster Aufruf</label>
 		</languageKey>
 	</data>
 </T3locallang>

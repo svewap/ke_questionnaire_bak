@@ -56,7 +56,7 @@ class RenderPartialViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\RenderViewHel
 	/**
 	 * Renders the content.
 	 *
-     * @param string $partial The partial to render
+         * @param string $partial The partial to render
 	 * @param array $arguments Arguments to pass to the partial
 	 * @return string
 	 */
@@ -65,7 +65,7 @@ class RenderPartialViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\RenderViewHel
             // Overload arguments with own extension local settings (to pass own settings to external partial)
             $arguments = $this->loadSettingsIntoArguments($arguments);
 			
-			$path_parts = pathinfo($partial);
+            $path_parts = pathinfo($partial);
             $path = realpath($path_parts['dirname']);
             $partial = $path_parts['filename'];
             
@@ -91,7 +91,7 @@ class RenderPartialViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\RenderViewHel
 		);
 	}
     
-    /**
+        /**
 	 * Set partial root path by controller context
 	 *
 	 * @param \TYPO3\CMS\Extbase\Mvc\Controller\ControllerContext $controllerContext

@@ -24,7 +24,7 @@ namespace Kennziffer\KeQuestionnaire\Utility;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 //require_once(PATH_site.'typo3conf/ext/ke_questionnaire/Resources/Private/Tcpdf/tcpdf.php');
-require_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_questionnaire').'Classes/Lib/Mpdf/mpdf.php');
+//require_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_questionnaire').'Classes/Lib/Mpdf/mpdf.php');
 
 /**
  *
@@ -40,7 +40,10 @@ class PdfExport {
      * @param string $html
      * @param string $filename
      */
-    public function createPdfFromHTML($html,$filename = "ke_questionnaire.pdf"){        
+    public function createPdfFromHTML($html,$filename = "ke_questionnaire.pdf"){
+
+        require_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_questionnaire').'Classes/Lib/Mpdf/mpdf.php');
+
         $this->createAndCheckTmpFile();
         
         $pdf = new \mPDF();

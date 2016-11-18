@@ -149,6 +149,8 @@
 			<label index="tx_kequestionnaire_domain_model_authcode">AuthCodeAuthentication code</label>
 			<label index="tx_kequestionnaire_domain_model_authcode.auth_code">Authentication code</label>
 			<label index="tx_kequestionnaire_domain_model_authcode.email">E-mail</label>
+                        <label index="tx_kequestionnaire_domain_model_authcode.lastreminder">Last time a reminder mail was send</label>
+                        <label index="tx_kequestionnaire_domain_model_authcode.firstactive">First time the authCode was used</label>
             
             <label index="tx_kequestionnaire_domain_model_dependancy">Dependancy</label>
             <label index="tx_kequestionnaire_domain_model_dependancy.answer">Actvating answer</label>
@@ -303,6 +305,8 @@
 			<label index="tx_kequestionnaire_domain_model_authcode">Authentication Code</label>
 			<label index="tx_kequestionnaire_domain_model_authcode.auth_code">Authentication Code</label>
 			<label index="tx_kequestionnaire_domain_model_authcode.email">E-Mail</label>
+                        <label index="tx_kequestionnaire_domain_model_authcode.lastreminder">Datum der letzten Erinnerung</label>
+                        <label index="tx_kequestionnaire_domain_model_authcode.firstactive">Erster Aufruf des AuthCodes</label>
 
 			<label index="tx_kequestionnaire_domain_model_dependancy">Abhängigkeit</label>
             <label index="tx_kequestionnaire_domain_model_dependancy.answer">Aktivierende Antwort</label>

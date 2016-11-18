@@ -16,7 +16,11 @@
 			<label index="list.select">Select a questionnaire and an export type to download the data</label>
 			<label index="list.types">Export types:</label>
 
-			<label index="csv.title">CSV / Table</label>
+			<label index="csvRb.title">CSV / Table (Result Lines)</label>
+			<label index="csvRb.description">
+				Export the data as CSV (Comma-separated values) file. It can be used to import data into multiple programs like Libre Office Calc and MS Excel
+			</label>            
+			<label index="csv.title">CSV / Table (Question Lines)</label>
 			<label index="csv.description">
 				Export the data as CSV (Comma-separated values) file. It can be used to import data into multiple programs like Libre Office Calc and MS Excel
 			</label>            
@@ -26,7 +30,8 @@
 			</label>
             
             <label index="menu.title">Export actions:</label>
-			<label index="menu.csv">CSV Export</label>
+			<label index="menu.csvRb">CSV Export (Result Lines)</label>
+			<label index="menu.csv">CSV Export (Question Lines)</label>
 			<label index="menu.pdf">PDF Export</label>
 
 			<label index="csv.download">Download CSV</label>
@@ -66,7 +71,11 @@
 			<label index="list.select">Wählen Sie den Fragebogen und den Export-Typ aus, um die Daten herunterzuladen</label>
 			<label index="list.types">Export-Typen:</label>
 
-			<label index="csv.title">CSV / Tabelle</label>
+			<label index="csvRb.title">CSV / Tabelle (Ergebnis Zeilen)</label>
+			<label index="csvRb.description">
+				Export der Daten als CSV (Comma-separated values)-Datei. Dieses Format kann genutzt werden, um die Daten in verschiedene Programme wie Libre Office Calc oder MS Excel zu importieren.
+			</label>            
+			<label index="csv.title">CSV / Tabelle (Fragen Zeilen)</label>
 			<label index="csv.description">
 				Export der Daten als CSV (Comma-separated values)-Datei. Dieses Format kann genutzt werden, um die Daten in verschiedene Programme wie Libre Office Calc oder MS Excel zu importieren.
 			</label>            
@@ -76,7 +85,8 @@
 			</label>
             
             <label index="menu.title">Export-Arten:</label>
-			<label index="menu.csv">CSV-Export</label>
+			<label index="menu.csvRb">CSV-Export (Ergebnis Zeilen)</label>
+			<label index="menu.csv">CSV-Export (Fragen Zeilen)</label>
 			<label index="menu.pdf">PDF-Export</label>
 
 			<label index="csv.download">CSV herunterladen</label>

@@ -65,7 +65,7 @@ $TCA['tx_kequestionnaire_domain_model_question'] = array(
 		),
 		'searchFields' => 'title,show_title,text,help_text,image,image_position,is_mandatory,must_be_correct,answers,',
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/Question.php',
-		'iconfile' => t3lib_extMgm::extRelPath('ke_questionnaire').'Resources/Public/Icons/question.svg'
+		'iconfile' => 'EXT:ke_questionnaire/Resources/Public/Icons/question.svg'
 	),
 );
 
@@ -96,7 +96,7 @@ $TCA['tx_kequestionnaire_domain_model_answer'] = array(
 		),
 		'searchFields' => 'title,value,text,is_correct_answer,',
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/Answer.php',
-		'iconfile' => t3lib_extMgm::extRelPath('ke_questionnaire').'Resources/Public/Icons/answer.svg'
+		'iconfile' => 'EXT:ke_questionnaire/Resources/Public/Icons/answer.svg'
 	),
 );
 
@@ -125,7 +125,7 @@ $TCA['tx_kequestionnaire_domain_model_resultquestion'] = array(
 		),
 		'searchFields' => 'answers,question,',
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/ResultQuestion.php',
-		'iconfile' => t3lib_extMgm::extRelPath('ke_questionnaire').'Resources/Public/Icons/resultquestion.svg'
+		'iconfile' => 'EXT:ke_questionnaire/Resources/Public/Icons/resultquestion.svg'
 	),
 );
 
@@ -155,7 +155,7 @@ $TCA['tx_kequestionnaire_domain_model_resultanswer'] = array(
 		),
 		'searchFields' => 'answer,',
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/ResultAnswer.php',
-		'iconfile' => t3lib_extMgm::extRelPath('ke_questionnaire').'Resources/Public/Icons/resultanswer.svg'
+		'iconfile' => 'EXT:ke_questionnaire/Resources/Public/Icons/resultanswer.svg'
 	),
 );
 
@@ -184,7 +184,7 @@ $TCA['tx_kequestionnaire_domain_model_result'] = array(
 		),
 		'searchFields' => 'finished,questions,',
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/Result.php',
-		'iconfile' => t3lib_extMgm::extRelPath('ke_questionnaire').'Resources/Public/Icons/result.svg'
+		'iconfile' => 'EXT:ke_questionnaire/Resources/Public/Icons/result.svg'
 	),
 );
 
@@ -213,7 +213,7 @@ $TCA['tx_kequestionnaire_domain_model_range'] = array(
 		),
 		'searchFields' => 'text,',
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/Range.php',
-		'iconfile' => t3lib_extMgm::extRelPath('ke_questionnaire').'Resources/Public/Icons/range.svg'
+		'iconfile' => 'EXT:ke_questionnaire/Resources/Public/Icons/range.svg'
 	),
 );
 
@@ -244,7 +244,7 @@ $TCA['tx_kequestionnaire_domain_model_authcode'] = array(
 		),
 		'searchFields' => 'authcode,',
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/AuthCode.php',
-		'iconfile' => t3lib_extMgm::extRelPath('ke_questionnaire').'Resources/Public/Icons/authcode.svg'
+		'iconfile' => 'EXT:ke_questionnaire/Resources/Public/Icons/authcode.svg'
 	),
 );
 
@@ -273,7 +273,7 @@ $TCA['tx_kequestionnaire_domain_model_dependancy'] = array(
 		),
 		'searchFields' => 'answer,',
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/Dependancy.php',
-		'iconfile' => t3lib_extMgm::extRelPath('ke_questionnaire').'Resources/Public/Icons/dependancy.svg'
+		'iconfile' => 'EXT:ke_questionnaire/Resources/Public/Icons/dependancy.svg'
 	),
 );
 
@@ -338,7 +338,7 @@ if (TYPO3_MODE === 'BE'){
 		$mainModuleName,		   # Kategorie
 		'Export',				   # Modulname
 		'',                                # Position
-		Array ( 'Export' => 'index,csv,downloadCsv,pdf,downloadPdf,csvInterval,csvCheckInterval,downloadCsvInterval'),     # Controller
+		Array ( 'Export' => 'index,csv,csvRb,downloadCsv,downloadCsvRb,pdf,downloadPdf,csvInterval,csvRbInterval,csvCheckInterval,downloadCsvInterval'),     # Controller
 		Array (	'access' => 'user,group',  # Konfiguration
 				'icon'	 => 'EXT:'.$_EXTKEY.'/ext_icon.gif',
 				'labels' => 'LLL:EXT:'.$_EXTKEY.'/Resources/Private/Language/locallang_mod_export.xml',

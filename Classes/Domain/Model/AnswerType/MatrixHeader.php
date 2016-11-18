@@ -149,12 +149,12 @@ class MatrixHeader extends \Kennziffer\KeQuestionnaire\Domain\Model\Answer {
 	
 	/**
 	 * Create the whole Csv Line
-	 * @param \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $results
+	 * @param array $results
 	 * @param \Kennziffer\KeQuestionnaire\Domain\Model\Question $question
 	 * @param array options
 	 * @return string
 	 */
-	public function getCsvLine(\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $results, \Kennziffer\KeQuestionnaire\Domain\Model\Question $question, $options = array()) {
+	public function getCsvLine(array $results, \Kennziffer\KeQuestionnaire\Domain\Model\Question $question, $options = array()) {
 		if ($options['rows']) $rows = $options['rows'];
 		else $rows = $this->getRows($question);
 		$line = '';
@@ -167,7 +167,7 @@ class MatrixHeader extends \Kennziffer\KeQuestionnaire\Domain\Model\Answer {
 
 			$aL[] = $row->getTitle();
 			if ($options['showAText']) {
-				$aL[] = strip_tags($row->getText());
+				$aL[] = strip_tags(preg_replace("/\r|\n/", "", str_replace($this->text,'',$row->getText())));
 			}
 
 			$line .= implode($options['separator'],$aL).$options['newline'];
@@ -179,19 +179,20 @@ class MatrixHeader extends \Kennziffer\KeQuestionnaire\Domain\Model\Answer {
 					}
 					$aL[] = $column->getTitle();
 					if ($options['showAText']) {
-						$aL[] = strip_tags($column->getText());
+						$aL[] = strip_tags(preg_replace("/\r|\n/", "", str_replace($this->text,'',$column->getText())));
 					}
 
 					foreach ($results as $result){
-						if ($column->getShortType() == 'Radiobutton' AND !$options['extended']) $rAnswer = $result->getAnswer($question->getUid(), $row->getUid(), 0);
-						else $rAnswer = $result->getAnswer($question->getUid(), $row->getUid(), $column->getUid());
+                                            //TODO: 
+						//if ($column->getShortType() == 'Radiobutton' AND !$options['extended']) $rAnswer = $result->getAnswer($question->getUid(), $row->getUid(), 0);
+						//else $rAnswer = $result->getAnswer($question->getUid(), $row->getUid(), $column->getUid());
 						$options['row'] = $row;
 						if ($rAnswer) $aL[] = $column->getCsvValue($rAnswer,$options);
 						else $aL[] = '';
 					}
 
 					foreach ($aL as $nr => $value){
-						if (!is_numeric($value)) $aL[$nr] = $this->text.$value.$this->text;
+						if (!is_numeric($value)) $aL[$nr] = $this->text. preg_replace("/\r|\n/", "", str_replace($this->text,'',$value)) .$this->text;
 					}
 
 					$line .= implode($options['separator'],$aL).$options['newline'];
@@ -220,7 +221,7 @@ class MatrixHeader extends \Kennziffer\KeQuestionnaire\Domain\Model\Answer {
 
 			$aL[] = $row->getTitle();
 			if ($options['showAText']) {
-				$aL[] = strip_tags($row->getText());
+				$aL[] = strip_tags(preg_replace("/\r|\n/", "", str_replace($options['textMarker'],'',$row->getText())));
 			}
 
 			$line .= implode($options['separator'],$aL).$options['newline'];
@@ -232,7 +233,7 @@ class MatrixHeader extends \Kennziffer\KeQuestionnaire\Domain\Model\Answer {
 					}
 					$aL[] = $column->getTitle();
 					if ($options['showAText']) {
-						$aL[] = strip_tags($column->getText());
+						$aL[] = strip_tags(preg_replace("/\r|\n/", "", str_replace($options['textMarker'],'',$column->getText())));
 					}
 
 					$line .= implode($options['separator'],$aL).$options['newline'];

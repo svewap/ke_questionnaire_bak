@@ -23,7 +23,6 @@ namespace Kennziffer\KeQuestionnaire\Domain\Model;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-use Kennziffer\KeQuestionnaire\Domain\Repository\ResultQuestionRepository;
 
 /**
  *
@@ -60,7 +59,7 @@ class Result extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Kennziffer\KeQuestionnaire\Domain\Model\ResultQuestion>
 	 * @cascade remove
-	 * @lazy
+     * @lazy
 	 */
 	protected $questions;
 
@@ -87,7 +86,7 @@ class Result extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 
 	/**
 	 * AuthCode
-	 * @lazy
+         * @lazy
 	 * @var \Kennziffer\KeQuestionnaire\Domain\Model\AuthCode
 	 */
 	protected $authCode;
@@ -405,12 +404,10 @@ class Result extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	public function getAnswer($questionUid, $answerUid, $columnUid = 0) {
 		$this->objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
 		$rep = $this->objectManager->get('Kennziffer\\KeQuestionnaire\\Domain\\Repository\\ResultQuestionRepository');
-		/** @var ResultQuestionRepository $resultQuestion */
 		$resultQuestion = $rep->findByQuestionAndResult($questionUid, $this);
 		$resultQuestion = $resultQuestion[0];
 		
 		if ($resultQuestion){
-			
 			foreach ($resultQuestion->getAnswers() as $resultAnswer) {
 				$answer = $resultAnswer->getAnswer();
 				if ($answer){

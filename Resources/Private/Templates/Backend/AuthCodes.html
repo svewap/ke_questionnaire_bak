@@ -1,3 +1,5 @@
+{namespace ke=Kennziffer\KeQuestionnaire\ViewHelpers}
+{namespace kep=Kennziffer\KeQuestionnairePremium\ViewHelpers}
 <f:layout name="Backend" />
 
 <f:section name="main">
@@ -18,13 +20,18 @@
 				</div>				
 				<b><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:codes.existing" /></b><br />
 				<br />
-				<table>
+				<table>                                    
+                                <f:if condition="{ke:premiumLoaded()}">
+                                    <f:then>
+                                       <kep:authCodesTtAddressList arguments="{authCodes:authCodes}"/> 
+                                    </f:then>
+                                    <f:else>
 					<tr>
 						<th style="width:200px"><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:list.table.authCode" /></th>
 						<th style="width:200px"><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:list.table.email" /></th>
 						<th><f:translate key="LLL:EXT:ke_questionnaire/Resources/Private/Language/locallang_mod_authcode.xml:list.table.participations" /></th>
-					</tr>
-				<f:for each="{authCodes}" as="code">
+					</tr>                                
+                                        <f:for each="{authCodes}" as="code">
 					<tr>
 						<td>{code.authCode}</td>
 						<td>{code.email}</td>
@@ -41,7 +48,9 @@
 							</f:for>
 						</td>
 					</tr>
-				</f:for>
+                                        </f:for>
+                                    </f:else>
+                                </f:if>
 				</table>
 			</f:then>
 			<f:else>

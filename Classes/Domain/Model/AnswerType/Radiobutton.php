@@ -71,6 +71,20 @@ class Radiobutton extends \Kennziffer\KeQuestionnaire\Domain\Model\Answer {
 			return '';
 		}
 	}
+        
+        /**
+	 * return the Value shown in the Csv Export
+	 * @param array $rAnswer
+	 * @param array $options
+	 * @return string
+	 */
+	public function getCsvValueRaw(array $rAnswer, $options = array()){
+        if ($rAnswer['value'] == $this->getUid()) {// OR $rAnswer->getCol() == $this->getUid()){
+			return $options['marker'];
+		} else {
+			return '';
+		}
+	}
 	
 	/**
 	 * Returns the saveType
